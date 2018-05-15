@@ -13,7 +13,7 @@ except Exception:
 
 setup(
     name='async-mailchimp3',
-    version='0.1.0',
+    version='0.1.1',
     description='A python asynchronous client for v3 of MailChimp API',
     long_description=long_description,
     url='https://github.com/MyMusicTaste/async-python-mailchimp',
