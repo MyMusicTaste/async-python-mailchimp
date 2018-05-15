@@ -67,7 +67,7 @@ very small number of records, and should improve performance for calls
 where fetching 5000 records would only provide a fraction by preventing
 the delay of making a huge number of requests.
 
-    client.lists.members.all('123456', count=100, offset=0)
+    await client.lists.members.all('123456', count=100, offset=0)
 
 ### Fields
 
@@ -76,24 +76,24 @@ all available fields (for example, only the email_address of a member).
 Simply add `fields` arguments in your function. The following only
 display email_address and id for each member in list 123456:
 
-    client.lists.members.all('123456', get_all=True, fields="members.email_address,members.id")
+    await client.lists.members.all('123456', get_all=True, fields="members.email_address,members.id")
 
 ### Examples
 
     # returns all the lists (only name and id)
-    client.lists.all(get_all=True, fields="lists.name,lists.id")
+    await client.lists.all(get_all=True, fields="lists.name,lists.id")
 
     # returns all members inside list '123456'
-    client.lists.members.all('123456', get_all=True)
+    await client.lists.members.all('123456', get_all=True)
 
     # return the first 100 member's email addresses for the list with id 123456
-    client.lists.members.all('123456', count=100, offset=0, fields="members.email_address")
+    await client.lists.members.all('123456', count=100, offset=0, fields="members.email_address")
 
     # returns the list matching id '123456'
-    client.lists.get('123456')
+    await client.lists.get('123456')
 
     # add John Doe with email john.doe@example.com to list matching id '123456'
-    client.lists.members.create('123456', {
+    await client.lists.members.create('123456', {
         'email_address': 'john.doe@example.com',
         'status': 'subscribed',
         'merge_fields': {
@@ -103,7 +103,7 @@ display email_address and id for each member in list 123456:
     })
 
     # returns all the campaigns
-    client.campaigns.all(get_all=True)
+    await client.campaigns.all(get_all=True)
 
     # You can also disable at runtime with the optional ``enabled`` parameter.
     # Every API call will return None
@@ -631,7 +631,7 @@ logger = logging.getLogger('mailchimp3.client')
 logger.addHandler(fh)
 
 # use the client normally
-client.lists.all(**{'fields': 'lists.date_created'})
+await client.lists.all(**{'fields': 'lists.date_created'})
 ```
 
 request/response detail will be appended into /path/to/some/log.log:
@@ -640,7 +640,7 @@ GET Request: https://us15.api.mailchimp.com/3.0/lists?fields=lists.date_created
 GET Response: 200 {"lists":[{"date_created":"2017-05-10T13:53:05+00:00"},{"date_created":"2017-08-22T20:27:56+00:00"},{"date_created":"2017-05-12T21:22:15+00:00"},{"date_created":"2017-04-27T17:42:04+00:00"},{"date_created":"2017-05-10T14:14:49+00:00"},{"date_created":"2017-05-10T13:52:37+00:00"},{"date_created":"2017-05-10T13:51:40+00:00"}]}
 ```
 
-Check the [docs](https://docs.python.org/2/library/logging.html) for more detail on the Python logging package.
+Check the [docs](https://docs.python.org/3/library/logging.html) for more detail on the Python logging package.
 
 ## Support
 

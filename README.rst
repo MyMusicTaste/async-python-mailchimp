@@ -81,7 +81,7 @@ the delay of making a huge number of requests.
 
 ::
 
-    client.lists.members.all('123456', count=100, offset=0)
+    await client.lists.members.all('123456', count=100, offset=0)
 
 Fields
 ~~~~~~
@@ -94,7 +94,7 @@ following only display email\_address and id for each member in list
 
 ::
 
-    client.lists.members.all('123456', get_all=True, fields="members.email_address,members.id")
+    await client.lists.members.all('123456', get_all=True, fields="members.email_address,members.id")
 
 Examples
 ~~~~~~~~
@@ -102,19 +102,19 @@ Examples
 ::
 
     # returns all the lists (only name and id)
-    client.lists.all(get_all=True, fields="lists.name,lists.id")
+    await client.lists.all(get_all=True, fields="lists.name,lists.id")
 
     # returns all members inside list '123456'
-    client.lists.members.all('123456', get_all=True)
+    await client.lists.members.all('123456', get_all=True)
 
     # return the first 100 member's email addresses for the list with id 123456
-    client.lists.members.all('123456', count=100, offset=0, fields="members.email_address")
+    await client.lists.members.all('123456', count=100, offset=0, fields="members.email_address")
 
     # returns the list matching id '123456'
-    client.lists.get('123456')
+    await client.lists.get('123456')
 
     # add John Doe with email john.doe@example.com to list matching id '123456'
-    client.lists.members.create('123456', {
+    await client.lists.members.create('123456', {
         'email_address': 'john.doe@example.com',
         'status': 'subscribed',
         'merge_fields': {
@@ -124,7 +124,7 @@ Examples
     })
 
     # returns all the campaigns
-    client.campaigns.all(get_all=True)
+    await client.campaigns.all(get_all=True)
 
     # You can also disable at runtime with the optional ``enabled`` parameter.
     # Every API call will return None
@@ -136,7 +136,7 @@ Examples
 
     # You are encouraged to specify a User-Agent for requests to the MailChimp
     # API. Headers can be specified using the ``request_headers`` parameter.
-    headers = requests.utils.default_headers()
+    headers = {}
     headers['User-Agent'] = 'Example (example@example.com)'
     client = MailChimp('YOUR USERNAME', 'YOUR SECRET KEY',
                        request_headers=headers)
@@ -857,7 +857,7 @@ logging namespace. Consider the following snippet to get started with logging:
     logger.addHandler(fh)
 
     # use the client normally
-    client.lists.all(**{'fields': 'lists.date_created'})
+    await client.lists.all(**{'fields': 'lists.date_created'})
 
 request/response detail will be appended into /path/to/some/log.log:
 
@@ -868,7 +868,7 @@ request/response detail will be appended into /path/to/some/log.log:
 
 Check the docs_ for more detail on the Python logging package.
 
-.. _docs: https://docs.python.org/2/library/logging.html/
+.. _docs: https://docs.python.org/3/library/logging.html/
 
 Support
 -------
