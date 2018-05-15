@@ -9,7 +9,7 @@ aiohttp >= 3.0.0. This Project forked from [python-mailchimp](https://github.com
 
 ### Installation
 
-This client is hosted at PyPi under the name `mailchimp3`, to install
+This client is hosted at PyPi under the name `async-mailchimp3`, to install
 it, simply run
 
 `pip install async-mailchimp3`
