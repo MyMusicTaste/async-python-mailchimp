@@ -1,5 +1,8 @@
 |MIT license|
 
+WARNING! THIS LIBRARY HAS NOT STABILIZED YET!
+====================
+
 async-python-mailchimp-api
 ====================
 
