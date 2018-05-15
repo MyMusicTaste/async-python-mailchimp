@@ -1,7 +1,5 @@
 ![MIT license](https://img.shields.io/badge/licence-MIT-blue.svg)
 
-# WARNING! THIS LIBRARY HAS NOT STABILIZED YET!
-
 # async-python-mailchimp-api
 
 A straighforward python asynchronous client for v3 of MailChimp API using

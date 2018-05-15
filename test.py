@@ -1,6 +1,7 @@
 # coding=utf-8
 """
-Some basic get list test to verify that the wrapper is working
+Some basic get list test to verify that the wrapper is working.
+You need to set `API_KEY`, `LIST_ID` ENV to successfully get result.
 """
 import asyncio
 import os
