@@ -25,7 +25,7 @@ class ListWebhooks(BaseApi):
         self.webhook_id = None
 
 
-    def create(self, list_id, data):
+    async def create(self, list_id, data):
         """
         Create a new webhook for a specific list.
 
@@ -46,7 +46,7 @@ class ListWebhooks(BaseApi):
         if 'url' not in data:
             raise KeyError('The list webhook must have a url')
         check_url(data['url'])
-        response = self._mc_client._post(url=self._build_path(list_id, 'webhooks'), data=data)
+        response = await self._mc_client._post(url=self._build_path(list_id, 'webhooks'), data=data)
         if response is not None:
             self.webhook_id = response['id']
         else:
@@ -54,7 +54,7 @@ class ListWebhooks(BaseApi):
         return response
 
 
-    def all(self, list_id):
+    async def all(self, list_id):
         """
         Get information about all webhooks for a specific list.
 
@@ -63,10 +63,10 @@ class ListWebhooks(BaseApi):
         """
         self.list_id = list_id
         self.webhook_id = None
-        return self._mc_client._get(url=self._build_path(list_id, 'webhooks'))
+        return await self._mc_client._get(url=self._build_path(list_id, 'webhooks'))
 
 
-    def get(self, list_id, webhook_id):
+    async def get(self, list_id, webhook_id):
         """
         Get information about a specific webhook.
 
@@ -77,10 +77,10 @@ class ListWebhooks(BaseApi):
         """
         self.list_id = list_id
         self.webhook_id = webhook_id
-        return self._mc_client._get(url=self._build_path(list_id, 'webhooks', webhook_id))
+        return await self._mc_client._get(url=self._build_path(list_id, 'webhooks', webhook_id))
 
 
-    def update(self, list_id, webhook_id, data):
+    async def update(self, list_id, webhook_id, data):
         """
         Update the settings for an existing webhook.
 
@@ -91,10 +91,10 @@ class ListWebhooks(BaseApi):
         """
         self.list_id = list_id
         self.webhook_id = webhook_id
-        return self._mc_client._patch(url=self._build_path(list_id, 'webhooks', webhook_id), data=data)
+        return await self._mc_client._patch(url=self._build_path(list_id, 'webhooks', webhook_id), data=data)
 
 
-    def delete(self, list_id, webhook_id):
+    async def delete(self, list_id, webhook_id):
         """
         Delete a specific webhook in a list.
 
@@ -105,4 +105,4 @@ class ListWebhooks(BaseApi):
         """
         self.list_id = list_id
         self.webhook_id = webhook_id
-        return self._mc_client._delete(url=self._build_path(list_id, 'webhooks', webhook_id))
+        return await self._mc_client._delete(url=self._build_path(list_id, 'webhooks', webhook_id))

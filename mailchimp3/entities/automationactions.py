@@ -25,7 +25,7 @@ class AutomationActions(BaseApi):
 
 
     # Paid feature
-    def pause(self, workflow_id):
+    async def pause(self, workflow_id):
         """
         Pause all emails in a specific Automation workflow.
 
@@ -33,11 +33,11 @@ class AutomationActions(BaseApi):
         :type workflow_id: :py:class:`str`
         """
         self.workflow_id = workflow_id
-        return self._mc_client._post(url=self._build_path(workflow_id, 'actions/pause-all-emails'))
+        return await self._mc_client._post(url=self._build_path(workflow_id, 'actions/pause-all-emails'))
 
 
     # Paid feature
-    def start(self, workflow_id):
+    async def start(self, workflow_id):
         """
         Start all emails in an Automation workflow.
 
@@ -45,4 +45,4 @@ class AutomationActions(BaseApi):
         :type workflow_id: :py:class:`str`
         """
         self.workflow_id = workflow_id
-        return self._mc_client._post(url=self._build_path(workflow_id, 'actions/start-all-emails'))
+        return await self._mc_client._post(url=self._build_path(workflow_id, 'actions/start-all-emails'))

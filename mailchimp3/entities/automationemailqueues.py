@@ -17,6 +17,7 @@ class AutomationEmailQueues(BaseApi):
     """
     Manage list member queues for Automation emails.
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize the endpoint
@@ -28,7 +29,7 @@ class AutomationEmailQueues(BaseApi):
         self.subscriber_hash = None
 
     # Paid feature
-    def create(self, workflow_id, email_id, data):
+    async def create(self, workflow_id, email_id, data):
         """
         Manually add a subscriber to a workflow, bypassing the default trigger
         settings. You can also use this endpoint to trigger a series of
@@ -50,7 +51,7 @@ class AutomationEmailQueues(BaseApi):
         if 'email_address' not in data:
             raise KeyError('The automation email queue must have an email_address')
         check_email(data['email_address'])
-        response = self._mc_client._post(
+        response = await self._mc_client._post(
             url=self._build_path(workflow_id, 'emails', email_id, 'queue'),
             data=data
         )
@@ -60,9 +61,8 @@ class AutomationEmailQueues(BaseApi):
             self.subscriber_hash = None
         return response
 
-
     # Paid feature
-    def all(self, workflow_id, email_id):
+    async def all(self, workflow_id, email_id):
         """
         Get information about an Automation email queue.
 
@@ -74,11 +74,10 @@ class AutomationEmailQueues(BaseApi):
         self.workflow_id = workflow_id
         self.email_id = email_id
         self.subscriber_hash = None
-        return self._mc_client._get(url=self._build_path(workflow_id, 'emails', email_id, 'queue'))
-
+        return await self._mc_client._get(url=self._build_path(workflow_id, 'emails', email_id, 'queue'))
 
     # Paid feature
-    def get(self, workflow_id, email_id, subscriber_hash):
+    async def get(self, workflow_id, email_id, subscriber_hash):
         """
         Get information about a specific subscriber in an Automation email
         queue.
@@ -95,5 +94,5 @@ class AutomationEmailQueues(BaseApi):
         self.workflow_id = workflow_id
         self.email_id = email_id
         self.subscriber_hash = subscriber_hash
-        return self._mc_client._get(url=self._build_path(workflow_id, 'emails', email_id, 'queue', subscriber_hash))
-
+        return await self._mc_client._get(
+            url=self._build_path(workflow_id, 'emails', email_id, 'queue', subscriber_hash))

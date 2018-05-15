@@ -1,14 +1,21 @@
 # coding=utf-8
 """
-Some basic tests to verify that the wrapper is working
+Some basic get list test to verify that the wrapper is working
 """
-from mailchimp3 import MailChimp
+import asyncio
+import os
 
 
-client = MailChimp('MAILCHIMP_USER', 'MAILCHIMP_SECRET')
+async def main():
+    from mailchimp3 import MailChimp
 
-print(client.lists.all(fields="lists.name,lists.id"))
+    API_KEY = os.getenv('API_KEY')
+    LIST_ID = os.getenv('LIST_ID')
 
-print(client.authorized_apps.all(get_all=False))
+    client = MailChimp(API_KEY)
+    result = await client.lists.get(LIST_ID)
+    print(result)
 
-print(client.automations.all(get_all=True))
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())

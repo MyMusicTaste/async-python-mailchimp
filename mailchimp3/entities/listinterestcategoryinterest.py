@@ -27,7 +27,7 @@ class ListInterestCategoryInterest(BaseApi):
         self.interest_id = None
 
 
-    def create(self, list_id, category_id, data):
+    async def create(self, list_id, category_id, data):
         """
         Create a new interest or ‘group name’ for a specific category.
 
@@ -49,7 +49,7 @@ class ListInterestCategoryInterest(BaseApi):
         self.category_id = category_id
         if 'name' not in data:
             raise KeyError('The list interest category interest must have a name')
-        response =  self._mc_client._post(
+        response = await self._mc_client._post(
             url=self._build_path(list_id, 'interest-categories', category_id, 'interests'),
             data=data
         )
@@ -60,7 +60,7 @@ class ListInterestCategoryInterest(BaseApi):
         return response
 
 
-    def all(self, list_id, category_id, get_all=False, **queryparams):
+    async def all(self, list_id, category_id, get_all=False, **queryparams):
         """
         Get a list of this category’s interests.
 
@@ -80,15 +80,15 @@ class ListInterestCategoryInterest(BaseApi):
         self.category_id = category_id
         self.interest_id = None
         if get_all:
-            return self._iterate(url=self._build_path(list_id, 'interest-categories', category_id, 'interests'), **queryparams)
+            return await self._iterate(url=self._build_path(list_id, 'interest-categories', category_id, 'interests'), **queryparams)
         else:
-            return self._mc_client._get(
+            return await self._mc_client._get(
                 url=self._build_path(list_id, 'interest-categories', category_id, 'interests'),
                 **queryparams
             )
 
 
-    def get(self, list_id, category_id, interest_id, **queryparams):
+    async def get(self, list_id, category_id, interest_id, **queryparams):
         """
         Get interests or ‘group names’ for a specific category.
 
@@ -105,13 +105,13 @@ class ListInterestCategoryInterest(BaseApi):
         self.list_id = list_id
         self.category_id = category_id
         self.interest_id = interest_id
-        return self._mc_client._get(
+        return await self._mc_client._get(
             url=self._build_path(list_id, 'interest-categories', category_id, 'interests', interest_id),
             **queryparams
         )
 
 
-    def update(self, list_id, category_id, interest_id, data):
+    async def update(self, list_id, category_id, interest_id, data):
         """
         Update interests or ‘group names’ for a specific category.
 
@@ -132,13 +132,13 @@ class ListInterestCategoryInterest(BaseApi):
         self.interest_id = interest_id
         if 'name' not in data:
             raise KeyError('The list interest category interest must have a name')
-        return self._mc_client._patch(
+        return await self._mc_client._patch(
             url=self._build_path(list_id, 'interest-categories', category_id, 'interests', interest_id),
             data=data
         )
 
 
-    def delete(self, list_id, category_id, interest_id):
+    async def delete(self, list_id, category_id, interest_id):
         """
         Delete interests or group names in a specific category.
 
@@ -152,6 +152,6 @@ class ListInterestCategoryInterest(BaseApi):
         self.list_id = list_id
         self.category_id = category_id
         self.interest_id = interest_id
-        return self._mc_client._delete(
+        return await self._mc_client._delete(
             url=self._build_path(list_id, 'interest-categories', category_id, 'interests', interest_id)
         )

@@ -25,7 +25,7 @@ class ListActivity(BaseApi):
         self.list_id = None
 
 
-    def all(self, list_id, **queryparams):
+    async def all(self, list_id, **queryparams):
         """
         Get up to the previous 180 days of daily detailed aggregated activity
         stats for a list, not including Automation activity.
@@ -37,4 +37,4 @@ class ListActivity(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.list_id = list_id
-        return self._mc_client._get(url=self._build_path(list_id, 'activity'), **queryparams)
+        return await self._mc_client._get(url=self._build_path(list_id, 'activity'), **queryparams)

@@ -14,6 +14,7 @@ class ReportEepURL(BaseApi):
     """
     Get a summary of social activity for the campaign, tracked by EepURL.
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize the endpoint
@@ -22,8 +23,7 @@ class ReportEepURL(BaseApi):
         self.endpoint = 'reports'
         self.campaign_id = None
 
-
-    def all(self, campaign_id, **queryparams):
+    async def all(self, campaign_id, **queryparams):
         """
         Get a summary of social activity for the campaign, tracked by EepURL.
 
@@ -34,4 +34,4 @@ class ReportEepURL(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.campaign_id = campaign_id
-        return self._mc_client._get(url=self._build_path(campaign_id, 'eepurl'), **queryparams)
+        return await self._mc_client._get(url=self._build_path(campaign_id, 'eepurl'), **queryparams)

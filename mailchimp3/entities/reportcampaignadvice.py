@@ -23,7 +23,7 @@ class ReportCampaignAdvice(BaseApi):
         self.campaign_id = None
 
 
-    def all(self, campaign_id, **queryparams):
+    async def all(self, campaign_id, **queryparams):
         """
         Get feedback based on a campaign’s statistics. Advice feedback is
         based on campaign stats like opens, clicks, unsubscribes, bounces, and
@@ -36,4 +36,4 @@ class ReportCampaignAdvice(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.campaign_id = campaign_id
-        return self._mc_client._get(url=self._build_path(campaign_id, 'advice'), **queryparams)
+        return await self._mc_client._get(url=self._build_path(campaign_id, 'advice'), **queryparams)

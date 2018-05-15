@@ -22,7 +22,7 @@ class BatchWebhooks(BaseApi):
         self.batch_webhook_id = None
 
 
-    def create(self, data):
+    async def create(self, data):
         """
         Configure a webhook that will fire whenever any batch request
         completes processing.
@@ -35,7 +35,7 @@ class BatchWebhooks(BaseApi):
         """
         if 'url' not in data:
             raise KeyError('The batch webhook must have a valid url')
-        response = self._mc_client._post(url=self._build_path(), data=data)
+        response = await self._mc_client._post(url=self._build_path(), data=data)
         if response is not None:
             self.batch_webhook_id = response['id']
         else:
@@ -43,7 +43,7 @@ class BatchWebhooks(BaseApi):
         return response
 
 
-    def all(self, get_all=False, **queryparams):
+    async def all(self, get_all=False, **queryparams):
         """
         Get all webhooks that have been configured for batches.
 
@@ -57,12 +57,12 @@ class BatchWebhooks(BaseApi):
         """
         self.batch_webhook_id = None
         if get_all:
-            return self._iterate(url=self._build_path(), **queryparams)
+            return await self._iterate(url=self._build_path(), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(), **queryparams)
+            return await self._mc_client._get(url=self._build_path(), **queryparams)
 
 
-    def get(self, batch_webhook_id, **queryparams):
+    async def get(self, batch_webhook_id, **queryparams):
         """
         Get information about a specific batch webhook.
 
@@ -73,10 +73,10 @@ class BatchWebhooks(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.batch_webhook_id = batch_webhook_id
-        return self._mc_client._get(url=self._build_path(batch_webhook_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(batch_webhook_id), **queryparams)
 
 
-    def update(self, batch_webhook_id, data):
+    async def update(self, batch_webhook_id, data):
         """
         Update a webhook that will fire whenever any batch request completes
         processing.
@@ -92,10 +92,10 @@ class BatchWebhooks(BaseApi):
         self.batch_webhook_id = batch_webhook_id
         if 'url' not in data:
             raise KeyError('The batch webhook must have a valid url')
-        return self._mc_client._patch(url=self._build_path(batch_webhook_id), data=data)
+        return await self._mc_client._patch(url=self._build_path(batch_webhook_id), data=data)
 
 
-    def delete(self, batch_webhook_id):
+    async def delete(self, batch_webhook_id):
         """
         Remove a batch webhook. Webhooks will no longer be sent to the given
         URL.
@@ -104,4 +104,4 @@ class BatchWebhooks(BaseApi):
         :type batch_webhook_id: :py:class:`str`
         """
         self.batch_webhook_id = batch_webhook_id
-        return self._mc_client._delete(url=self._build_path(batch_webhook_id))
+        return await self._mc_client._delete(url=self._build_path(batch_webhook_id))

@@ -33,7 +33,7 @@ class Campaigns(BaseApi):
         self.send_checklist = CampaignSendChecklist(self)
 
 
-    def create(self, data):
+    async def create(self, data):
         """
         Create a new MailChimp campaign.
 
@@ -98,7 +98,7 @@ class Campaigns(BaseApi):
                 raise KeyError('The campaign rss_opts must have a feed_url')
             if not data['rss_opts']['frequency'] in ['daily', 'weekly', 'monthly']:
                 raise ValueError('The rss_opts frequency must be one of "daily", "weekly", or "monthly"')
-        response = self._mc_client._post(url=self._build_path(), data=data)
+        response = await self._mc_client._post(url=self._build_path(), data=data)
         if response is not None:
             self.campaign_id = response['id']
         else:
@@ -106,7 +106,7 @@ class Campaigns(BaseApi):
         return response
 
 
-    def all(self, get_all=False, **queryparams):
+    async def all(self, get_all=False, **queryparams):
         """
         Get all campaigns in an account.
 
@@ -133,12 +133,12 @@ class Campaigns(BaseApi):
         """
         self.campaign_id = None
         if get_all:
-            return self._iterate(url=self._build_path(), **queryparams)
+            return await self._iterate(url=self._build_path(), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(), **queryparams)
+            return await self._mc_client._get(url=self._build_path(), **queryparams)
 
 
-    def get(self, campaign_id, **queryparams):
+    async def get(self, campaign_id, **queryparams):
         """
         Get information about a specific campaign.
 
@@ -149,10 +149,10 @@ class Campaigns(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.campaign_id = campaign_id
-        return self._mc_client._get(url=self._build_path(campaign_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(campaign_id), **queryparams)
 
 
-    def update(self, campaign_id, data):
+    async def update(self, campaign_id, data):
         """
         Update some or all of the settings for a specific campaign.
 
@@ -179,10 +179,10 @@ class Campaigns(BaseApi):
         if 'reply_to' not in data['settings']:
             raise KeyError('The campaign settings must have a reply_to')
         check_email(data['settings']['reply_to'])
-        return self._mc_client._patch(url=self._build_path(campaign_id), data=data)
+        return await self._mc_client._patch(url=self._build_path(campaign_id), data=data)
 
 
-    def delete(self, campaign_id):
+    async def delete(self, campaign_id):
         """
         Remove a campaign from your MailChimp account.
 
@@ -190,4 +190,4 @@ class Campaigns(BaseApi):
         :type campaign_id: :py:class:`str`
         """
         self.campaign_id = campaign_id
-        return self._mc_client._delete(url=self._build_path(campaign_id))
+        return await self._mc_client._delete(url=self._build_path(campaign_id))

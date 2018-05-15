@@ -22,7 +22,7 @@ class ReportUnsubscribes(BaseApi):
         self.subscriber_hash = None
 
 
-    def all(self, campaign_id, get_all=False, **queryparams):
+    async def all(self, campaign_id, get_all=False, **queryparams):
         """
         Get information about members who have unsubscribed from a specific
         campaign.
@@ -40,12 +40,12 @@ class ReportUnsubscribes(BaseApi):
         self.campaign_id = campaign_id
         self.subscriber_hash = None
         if get_all:
-            return self._iterate(url=self._build_path(campaign_id, 'unsubscribed'), **queryparams)
+            return await self._iterate(url=self._build_path(campaign_id, 'unsubscribed'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(campaign_id, 'unsubscribed'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(campaign_id, 'unsubscribed'), **queryparams)
 
 
-    def get(self, campaign_id, subscriber_hash, **queryparams):
+    async def get(self, campaign_id, subscriber_hash, **queryparams):
         """
         Get information about a specific list member who unsubscribed from a
         campaign.
@@ -62,4 +62,4 @@ class ReportUnsubscribes(BaseApi):
         subscriber_hash = check_subscriber_hash(subscriber_hash)
         self.campaign_id = campaign_id
         self.subscriber_hash = subscriber_hash
-        return self._mc_client._get(url=self._build_path(campaign_id, 'unsubscribed', subscriber_hash), **queryparams)
+        return await self._mc_client._get(url=self._build_path(campaign_id, 'unsubscribed', subscriber_hash), **queryparams)

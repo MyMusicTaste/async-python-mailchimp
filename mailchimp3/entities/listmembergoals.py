@@ -25,7 +25,7 @@ class ListMemberGoals(BaseApi):
         self.subscriber_hash = None
 
 
-    def all(self, list_id, subscriber_hash, **queryparams):
+    async def all(self, list_id, subscriber_hash, **queryparams):
         """
         Get the last 50 Goal events for a member on a specific list.
 
@@ -41,4 +41,4 @@ class ListMemberGoals(BaseApi):
         subscriber_hash = check_subscriber_hash(subscriber_hash)
         self.list_id = list_id
         self.subscriber_hash = subscriber_hash
-        return self._mc_client._get(url=self._build_path(list_id, 'members', subscriber_hash, 'goals'), **queryparams)
+        return await self._mc_client._get(url=self._build_path(list_id, 'members', subscriber_hash, 'goals'), **queryparams)

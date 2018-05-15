@@ -26,7 +26,7 @@ class StoreCartLines(BaseApi):
         self.line_id = None
 
 
-    def create(self, store_id, cart_id, data):
+    async def create(self, store_id, cart_id, data):
         """
         Add a new line item to an existing cart.
 
@@ -56,7 +56,7 @@ class StoreCartLines(BaseApi):
             raise KeyError('The cart line must have a quantity')
         if 'price' not in data:
             raise KeyError('The cart line must have a price')
-        response = self._mc_client._post(url=self._build_path(store_id, 'carts', cart_id, 'lines'), data=data)
+        response = await self._mc_client._post(url=self._build_path(store_id, 'carts', cart_id, 'lines'), data=data)
         if response is not None:
             self.line_id = response['id']
         else:
@@ -64,7 +64,7 @@ class StoreCartLines(BaseApi):
         return response
 
 
-    def all(self, store_id, cart_id, get_all=False, **queryparams):
+    async def all(self, store_id, cart_id, get_all=False, **queryparams):
         """
         Get information about a cart’s line items.
 
@@ -84,12 +84,12 @@ class StoreCartLines(BaseApi):
         self.cart_id = cart_id
         self.line_id = None
         if get_all:
-            return self._iterate(url=self._build_path(store_id, 'carts', cart_id, 'lines'), **queryparams)
+            return await self._iterate(url=self._build_path(store_id, 'carts', cart_id, 'lines'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(store_id, 'carts', cart_id, 'lines'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(store_id, 'carts', cart_id, 'lines'), **queryparams)
 
 
-    def get(self, store_id, cart_id, line_id, **queryparams):
+    async def get(self, store_id, cart_id, line_id, **queryparams):
         """
         Get information about a specific cart line item.
 
@@ -106,10 +106,10 @@ class StoreCartLines(BaseApi):
         self.store_id = store_id
         self.cart_id = cart_id
         self.line_id = line_id
-        return self._mc_client._get(url=self._build_path(store_id, 'carts', cart_id, 'lines', line_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(store_id, 'carts', cart_id, 'lines', line_id), **queryparams)
 
 
-    def update(self, store_id, cart_id, line_id, data):
+    async def update(self, store_id, cart_id, line_id, data):
         """
         Update a specific cart line item.
 
@@ -125,10 +125,10 @@ class StoreCartLines(BaseApi):
         self.store_id = store_id
         self.cart_id = cart_id
         self.line_id = line_id
-        return self._mc_client._patch(url=self._build_path(store_id, 'carts', cart_id, 'lines', line_id), data=data)
+        return await self._mc_client._patch(url=self._build_path(store_id, 'carts', cart_id, 'lines', line_id), data=data)
 
 
-    def delete(self, store_id, cart_id, line_id):
+    async def delete(self, store_id, cart_id, line_id):
         """
         Delete a cart.
 
@@ -142,4 +142,4 @@ class StoreCartLines(BaseApi):
         self.store_id = store_id
         self.cart_id = cart_id
         self.line_id = line_id
-        return self._mc_client._delete(url=self._build_path(store_id, 'carts', cart_id, 'lines', line_id))
+        return await self._mc_client._delete(url=self._build_path(store_id, 'carts', cart_id, 'lines', line_id))

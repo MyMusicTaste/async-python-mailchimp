@@ -24,7 +24,7 @@ class ListGrowthHistory(BaseApi):
         self.month = None
 
 
-    def all(self, list_id, get_all=False, **queryparams):
+    async def all(self, list_id, get_all=False, **queryparams):
         """
         Get a month-by-month summary of a specific list’s growth activity.
 
@@ -41,12 +41,12 @@ class ListGrowthHistory(BaseApi):
         self.list_id = list_id
         self.month = None
         if get_all:
-            return self._iterate(url=self._build_path(list_id, 'growth-history'), **queryparams)
+            return await self._iterate(url=self._build_path(list_id, 'growth-history'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(list_id, 'growth-history'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(list_id, 'growth-history'), **queryparams)
 
 
-    def get(self, list_id, month, **queryparams):
+    async def get(self, list_id, month, **queryparams):
         """
         Get a summary of a specific list’s growth activity for a specific month and year.
 
@@ -60,4 +60,4 @@ class ListGrowthHistory(BaseApi):
         """
         self.list_id = list_id
         self.month = month
-        return self._mc_client._get(url=self._build_path(list_id, 'growth-history', month), **queryparams)
+        return await self._mc_client._get(url=self._build_path(list_id, 'growth-history', month), **queryparams)

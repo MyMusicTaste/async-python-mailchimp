@@ -24,7 +24,7 @@ class AuthorizedApps(BaseApi):
         self.app_id = None
 
 
-    def create(self, data):
+    async def create(self, data):
         """
         Retrieve OAuth2-based credentials to associate API calls with your
         application.
@@ -41,10 +41,10 @@ class AuthorizedApps(BaseApi):
             raise KeyError('The authorized app must have a client_id')
         if 'client_secret' not in data:
             raise KeyError('The authorized app must have a client_secret')
-        return self._mc_client._post(url=self._build_path(), data=data)
+        return await self._mc_client._post(url=self._build_path(), data=data)
 
 
-    def all(self, get_all=False, **queryparams):
+    async def all(self, get_all=False, **queryparams):
         """
         Get a list of an account’s registered, connected applications.
 
@@ -58,12 +58,12 @@ class AuthorizedApps(BaseApi):
         """
         self.app_id = None
         if get_all:
-            return self._iterate(url=self._build_path(), **queryparams)
+            return await self._iterate(url=self._build_path(), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(), **queryparams)
+            return await self._mc_client._get(url=self._build_path(), **queryparams)
 
 
-    def get(self, app_id, **queryparams):
+    async def get(self, app_id, **queryparams):
         """
         Get information about a specific authorized application
 
@@ -74,4 +74,4 @@ class AuthorizedApps(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.app_id = app_id
-        return self._mc_client._get(url=self._build_path(app_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(app_id), **queryparams)

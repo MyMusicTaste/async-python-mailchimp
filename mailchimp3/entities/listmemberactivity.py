@@ -25,7 +25,7 @@ class ListMemberActivity(BaseApi):
         self.subscriber_hash = None
 
 
-    def all(self, list_id, subscriber_hash, **queryparams):
+    async def all(self, list_id, subscriber_hash, **queryparams):
         """
         Get the last 50 events of a member’s activity on a specific list,
         including opens, clicks, and unsubscribes.
@@ -42,4 +42,4 @@ class ListMemberActivity(BaseApi):
         subscriber_hash = check_subscriber_hash(subscriber_hash)
         self.list_id = list_id
         self.subscriber_hash = subscriber_hash
-        return self._mc_client._get(url=self._build_path(list_id, 'members', subscriber_hash, 'activity'), **queryparams)
+        return await self._mc_client._get(url=self._build_path(list_id, 'members', subscriber_hash, 'activity'), **queryparams)

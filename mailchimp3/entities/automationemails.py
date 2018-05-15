@@ -31,7 +31,7 @@ class AutomationEmails(BaseApi):
 
 
     # Paid feature
-    def all(self, workflow_id, get_all=False, **queryparams):
+    async def all(self, workflow_id, get_all=False, **queryparams):
         """
         Get a summary of the emails in an Automation workflow.
 
@@ -46,13 +46,13 @@ class AutomationEmails(BaseApi):
         self.workflow_id = workflow_id
         self.email_id = None
         if get_all:
-            return self._iterate(url=self._build_path(workflow_id, 'emails'), **queryparams)
+            return await self._iterate(url=self._build_path(workflow_id, 'emails'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(workflow_id, 'emails'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(workflow_id, 'emails'), **queryparams)
 
 
     # Paid feature
-    def get(self, workflow_id, email_id):
+    async def get(self, workflow_id, email_id):
         """
         Get information about an individual Automation workflow email.
 
@@ -63,4 +63,4 @@ class AutomationEmails(BaseApi):
         """
         self.workflow_id = workflow_id
         self.email_id = email_id
-        return self._mc_client._get(url=self._build_path(workflow_id, 'emails', email_id))
+        return await self._mc_client._get(url=self._build_path(workflow_id, 'emails', email_id))

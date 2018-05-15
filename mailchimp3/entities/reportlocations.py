@@ -23,7 +23,7 @@ class ReportLocations(BaseApi):
         self.campaign_id = None
 
 
-    def all(self, campaign_id, get_all=False, **queryparams):
+    async def all(self, campaign_id, get_all=False, **queryparams):
         """
         Get top open locations for a specific campaign.
 
@@ -39,6 +39,6 @@ class ReportLocations(BaseApi):
         """
         self.campaign_id = campaign_id
         if get_all:
-            return self._iterate(url=self._build_path(campaign_id, 'locations'), **queryparams)
+            return await self._iterate(url=self._build_path(campaign_id, 'locations'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(campaign_id, 'locations'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(campaign_id, 'locations'), **queryparams)

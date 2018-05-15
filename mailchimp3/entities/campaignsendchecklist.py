@@ -24,7 +24,7 @@ class CampaignSendChecklist(BaseApi):
         self.campaign_id = None
 
 
-    def get(self, campaign_id, **queryparams):
+    async def get(self, campaign_id, **queryparams):
         """
         Review the send checklist for a campaign, and resolve any issues
         before sending.
@@ -36,5 +36,5 @@ class CampaignSendChecklist(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.campaign_id = campaign_id
-        return self._mc_client._get(url=self._build_path(campaign_id, 'send-checklist'), **queryparams)
+        return await self._mc_client._get(url=self._build_path(campaign_id, 'send-checklist'), **queryparams)
 

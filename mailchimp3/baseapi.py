@@ -33,7 +33,7 @@ class BaseApi(object):
         """
         return '/'.join(chain((self.endpoint,), map(str, args)))
 
-    def _iterate(self, url, **queryparams):
+    async def _iterate(self, url, **queryparams):
         """
         Iterate over all pages for the given url. Feed in the result of self._build_path as the url.
 
@@ -57,12 +57,12 @@ class BaseApi(object):
         queryparams.pop("offset", None)
         queryparams.pop("count", None)
         # Fetch results from mailchimp, up to first 1000
-        result = self._mc_client._get(url=url, offset=0, count=1000, **queryparams)
+        result = await self._mc_client._get(url=url, offset=0, count=1000, **queryparams)
         total = result['total_items']
         # Fetch further results if necessary
         if total > 1000:
             for offset in range(1, int(total / 1000) + 1):
-                result = merge_results(result, self._mc_client._get(
+                result = merge_results(result, await self._mc_client._get(
                     url=url,
                     offset=int(offset * 1000),
                     count=1000,

@@ -15,6 +15,7 @@ class AutomationEmailActions(BaseApi):
     """
     Manage individual emails in an Automation workflow.
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize the endpoint
@@ -24,9 +25,8 @@ class AutomationEmailActions(BaseApi):
         self.workflow_id = None
         self.email_id = None
 
-
     # Paid feature
-    def pause(self, workflow_id, email_id):
+    async def pause(self, workflow_id, email_id):
         """
         Pause an automated email.
 
@@ -37,11 +37,10 @@ class AutomationEmailActions(BaseApi):
         """
         self.workflow_id = workflow_id
         self.email_id = email_id
-        return self._mc_client._post(url=self._build_path(workflow_id, 'emails', email_id, 'actions/pause'))
-
+        return await self._mc_client._post(url=self._build_path(workflow_id, 'emails', email_id, 'actions/pause'))
 
     # Paid feature
-    def start(self, workflow_id, email_id):
+    async def start(self, workflow_id, email_id):
         """
         Start an automated email.
 
@@ -52,4 +51,4 @@ class AutomationEmailActions(BaseApi):
         """
         self.workflow_id = workflow_id
         self.email_id = email_id
-        return self._mc_client._post(url=self._build_path(workflow_id, 'emails', email_id, 'actions/start'))
+        return await self._mc_client._post(url=self._build_path(workflow_id, 'emails', email_id, 'actions/start'))

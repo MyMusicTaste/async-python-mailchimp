@@ -16,6 +16,7 @@ class ReportClickDetailMembers(BaseApi):
     Get information about specific subscribers who clicked on links in a
     campaign.
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize the endpoint
@@ -26,8 +27,7 @@ class ReportClickDetailMembers(BaseApi):
         self.link_id = None
         self.subscriber_hash = None
 
-
-    def all(self, campaign_id, link_id, get_all=False, **queryparams):
+    async def all(self, campaign_id, link_id, get_all=False, **queryparams):
         """
         Get information about list members who clicked on a specific link in a
         campaign.
@@ -48,15 +48,15 @@ class ReportClickDetailMembers(BaseApi):
         self.link_id = link_id
         self.subscriber_hash = None
         if get_all:
-            return self._iterate(url=self._build_path(campaign_id, 'click-details', link_id, 'members'), **queryparams)
+            return await self._iterate(url=self._build_path(campaign_id, 'click-details', link_id, 'members'),
+                                       **queryparams)
         else:
-            return self._mc_client._get(
+            return await self._mc_client._get(
                 url=self._build_path(campaign_id, 'click-details', link_id, 'members'),
                 **queryparams
             )
 
-
-    def get(self, campaign_id, link_id, subscriber_hash, **queryparams):
+    async def get(self, campaign_id, link_id, subscriber_hash, **queryparams):
         """
         Get information about a specific subscriber who clicked a link in a
         specific campaign.
@@ -76,7 +76,7 @@ class ReportClickDetailMembers(BaseApi):
         self.campaign_id = campaign_id
         self.link_id = link_id
         self.subscriber_hash = subscriber_hash
-        return self._mc_client._get(
+        return await self._mc_client._get(
             url=self._build_path(campaign_id, 'click-details', link_id, 'members', subscriber_hash),
             **queryparams
         )

@@ -25,7 +25,7 @@ class ReportSubReports(BaseApi):
         self.campaign_id = None
 
 
-    def all(self, campaign_id, **queryparams):
+    async def all(self, campaign_id, **queryparams):
         """
         Get a list of reports with child campaigns for a specific parent
         campaign.
@@ -37,4 +37,4 @@ class ReportSubReports(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.campaign_id = campaign_id
-        return self._mc_client._get(url=self._build_path(campaign_id, 'sub-reports'), **queryparams)
+        return await self._mc_client._get(url=self._build_path(campaign_id, 'sub-reports'), **queryparams)

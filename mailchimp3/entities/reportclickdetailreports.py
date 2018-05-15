@@ -15,6 +15,7 @@ class ReportClickDetailReports(BaseApi):
     """
     Get detailed information about links clicked in campaigns.
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize the endpoint
@@ -25,8 +26,7 @@ class ReportClickDetailReports(BaseApi):
         self.link_id = None
         self.members = ReportClickDetailMembers(self)
 
-
-    def all(self, campaign_id, get_all=False, **queryparams):
+    async def all(self, campaign_id, get_all=False, **queryparams):
         """
         Get information about clicks on specific links in your MailChimp
         campaigns.
@@ -44,12 +44,11 @@ class ReportClickDetailReports(BaseApi):
         self.campaign_id = campaign_id
         self.link_id = None
         if get_all:
-            return self._iterate(url=self._build_path(campaign_id, 'click-details'), **queryparams)
+            return await self._iterate(url=self._build_path(campaign_id, 'click-details'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(campaign_id, 'click-details'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(campaign_id, 'click-details'), **queryparams)
 
-
-    def get(self, campaign_id, link_id, **queryparams):
+    async def get(self, campaign_id, link_id, **queryparams):
         """
         Get click details for a specific link in a campaign.
 
@@ -63,4 +62,4 @@ class ReportClickDetailReports(BaseApi):
         """
         self.campaign_id = campaign_id
         self.link_id = link_id
-        return self._mc_client._get(url=self._build_path(campaign_id, 'click-details', link_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(campaign_id, 'click-details', link_id), **queryparams)

@@ -28,7 +28,7 @@ class ConversationMessages(BaseApi):
 
 
     # Paid feature
-    def create(self, conversation_id, data):
+    async def create(self, conversation_id, data):
         """
         Post a new message to a conversation.
 
@@ -49,7 +49,7 @@ class ConversationMessages(BaseApi):
             raise KeyError('The conversation message must have a read')
         if data['read'] not in [True, False]:
             raise TypeError('The conversation message read must be True or False')
-        response =  self._mc_client._post(url=self._build_path(conversation_id, 'messages'), data=data)
+        response =  await self._mc_client._post(url=self._build_path(conversation_id, 'messages'), data=data)
         if response is not None:
             self.message_id = response['id']
         else:
@@ -58,7 +58,7 @@ class ConversationMessages(BaseApi):
 
 
     # Paid feature
-    def all(self, conversation_id, **queryparams):
+    async def all(self, conversation_id, **queryparams):
         """
         Get messages from a specific conversation.
 
@@ -76,11 +76,11 @@ class ConversationMessages(BaseApi):
         """
         self.conversation_id = conversation_id
         self.message_id = None
-        return self._mc_client._get(url=self._build_path(conversation_id, 'messages'), **queryparams)
+        return await self._mc_client._get(url=self._build_path(conversation_id, 'messages'), **queryparams)
 
 
     # Paid feature
-    def get(self, conversation_id, message_id, **queryparams):
+    async def get(self, conversation_id, message_id, **queryparams):
         """
         Get an individual message in a conversation.
 
@@ -94,4 +94,4 @@ class ConversationMessages(BaseApi):
         """
         self.conversation_id = conversation_id
         self.message_id = message_id
-        return self._mc_client._get(url=self._build_path(conversation_id, 'messages', message_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(conversation_id, 'messages', message_id), **queryparams)

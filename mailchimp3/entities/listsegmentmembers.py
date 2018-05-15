@@ -15,6 +15,7 @@ class ListSegmentMembers(BaseApi):
     """
     Manage list members in a saved segment.
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize the endpoint
@@ -25,8 +26,7 @@ class ListSegmentMembers(BaseApi):
         self.segment_id = None
         self.subscriber_hash = None
 
-
-    def create(self, list_id, segment_id, data):
+    async def create(self, list_id, segment_id, data):
         """
         Add a member to a static segment.
 
@@ -56,15 +56,15 @@ class ListSegmentMembers(BaseApi):
         if data['status'] not in ['subscribed', 'unsubscribed', 'cleaned', 'pending']:
             raise ValueError('The list segment member status must be one of "subscribed", "unsubscribed", "cleaned" or'
                              '"pending"')
-        response = self._mc_client._post(url=self._build_path(list_id, 'segments', segment_id, 'members'), data=data)
+        response = await self._mc_client._post(url=self._build_path(list_id, 'segments', segment_id, 'members'),
+                                               data=data)
         if response is not None:
             self.subscriber_hash = response['id']
         else:
             self.subscriber_hash = None
         return response
 
-
-    def all(self, list_id, segment_id, get_all=False, **queryparams):
+    async def all(self, list_id, segment_id, get_all=False, **queryparams):
         """
         Get information about members in a saved segment.
 
@@ -84,12 +84,12 @@ class ListSegmentMembers(BaseApi):
         self.segment_id = segment_id
         self.subscriber_hash = None
         if get_all:
-            return self._iterate(url=self._build_path(list_id, 'segments', segment_id, 'members'), **queryparams)
+            return await self._iterate(url=self._build_path(list_id, 'segments', segment_id, 'members'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(list_id, 'segments', segment_id, 'members'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(list_id, 'segments', segment_id, 'members'),
+                                              **queryparams)
 
-
-    def delete(self, list_id, segment_id, subscriber_hash):
+    async def delete(self, list_id, segment_id, subscriber_hash):
         """
         Remove a member from the specified static segment.
 
@@ -105,6 +105,6 @@ class ListSegmentMembers(BaseApi):
         self.list_id = list_id
         self.segment_id = segment_id
         self.subscriber_hash = subscriber_hash
-        return self._mc_client._delete(
+        return await self._mc_client._delete(
             url=self._build_path(list_id, 'segments', segment_id, 'members', subscriber_hash)
         )

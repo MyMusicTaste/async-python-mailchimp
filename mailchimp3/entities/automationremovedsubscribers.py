@@ -26,7 +26,7 @@ class AutomationRemovedSubscribers(BaseApi):
 
 
     # Paid feature
-    def create(self, workflow_id, data):
+    async def create(self, workflow_id, data):
         """
         Remove a subscriber from a specific Automation workflow. You can
         remove a subscriber at any point in an Automation workflow, regardless
@@ -45,11 +45,11 @@ class AutomationRemovedSubscribers(BaseApi):
         if 'email_address' not in data:
             raise KeyError('The automation removed subscriber must have an email_address')
         check_email(data['email_address'])
-        return self._mc_client._post(url=self._build_path(workflow_id, 'removed-subscribers'), data=data)
+        return await self._mc_client._post(url=self._build_path(workflow_id, 'removed-subscribers'), data=data)
 
 
     # Paid feature
-    def all(self, workflow_id):
+    async def all(self, workflow_id):
         """
         Get information about subscribers who were removed from an Automation
         workflow.
@@ -58,5 +58,5 @@ class AutomationRemovedSubscribers(BaseApi):
         :type workflow_id: :py:class:`str`
         """
         self.workflow_id = workflow_id
-        return self._mc_client._get(url=self._build_path(workflow_id, 'removed-subscribers'))
+        return await self._mc_client._get(url=self._build_path(workflow_id, 'removed-subscribers'))
 

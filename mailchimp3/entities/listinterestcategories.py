@@ -29,7 +29,7 @@ class ListInterestCategories(BaseApi):
         self.interests = ListInterestCategoryInterest(self)
 
 
-    def create(self, list_id, data):
+    async def create(self, list_id, data):
         """
         Create a new interest category.
 
@@ -50,7 +50,7 @@ class ListInterestCategories(BaseApi):
         if data['type'] not in ['checkboxes', 'dropdown', 'radio', 'hidden']:
             raise ValueError('The list interest category type must be one of "checkboxes", "dropdown", "radio", or '
                              '"hidden"')
-        response = self._mc_client._post(url=self._build_path(list_id, 'interest-categories'), data=data)
+        response = await self._mc_client._post(url=self._build_path(list_id, 'interest-categories'), data=data)
         if response is not None:
             self.category_id = response['id']
         else:
@@ -58,7 +58,7 @@ class ListInterestCategories(BaseApi):
         return response
 
 
-    def all(self, list_id, get_all=False, **queryparams):
+    async def all(self, list_id, get_all=False, **queryparams):
         """
         Get information about a list’s interest categories.
 
@@ -76,12 +76,12 @@ class ListInterestCategories(BaseApi):
         self.list_id = list_id
         self.category_id = None
         if get_all:
-            return self._iterate(url=self._build_path(list_id, 'interest-categories'), **queryparams)
+            return await self._iterate(url=self._build_path(list_id, 'interest-categories'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(list_id, 'interest-categories'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(list_id, 'interest-categories'), **queryparams)
 
 
-    def get(self, list_id, category_id, **queryparams):
+    async def get(self, list_id, category_id, **queryparams):
         """
         Get information about a specific interest category.
 
@@ -95,10 +95,10 @@ class ListInterestCategories(BaseApi):
         """
         self.list_id = list_id
         self.category_id = category_id
-        return self._mc_client._get(url=self._build_path(list_id, 'interest-categories', category_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(list_id, 'interest-categories', category_id), **queryparams)
 
 
-    def update(self, list_id, category_id, data):
+    async def update(self, list_id, category_id, data):
         """
         Update a specific interest category.
 
@@ -122,10 +122,10 @@ class ListInterestCategories(BaseApi):
         if data['type'] not in ['checkboxes', 'dropdown', 'radio', 'hidden']:
             raise ValueError('The list interest category type must be one of "checkboxes", "dropdown", "radio", or '
                              '"hidden"')
-        return self._mc_client._patch(url=self._build_path(list_id, 'interest-categories', category_id), data=data)
+        return await self._mc_client._patch(url=self._build_path(list_id, 'interest-categories', category_id), data=data)
 
 
-    def delete(self, list_id, category_id):
+    async def delete(self, list_id, category_id):
         """
         Delete a specific interest category.
 
@@ -136,4 +136,4 @@ class ListInterestCategories(BaseApi):
         """
         self.list_id = list_id
         self.category_id = category_id
-        return self._mc_client._delete(url=self._build_path(list_id, 'interest-categories', category_id))
+        return await self._mc_client._delete(url=self._build_path(list_id, 'interest-categories', category_id))

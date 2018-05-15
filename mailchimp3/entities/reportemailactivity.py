@@ -25,7 +25,7 @@ class ReportEmailActivity(BaseApi):
         self.subscriber_hash = None
 
 
-    def all(self, campaign_id, get_all=False, **queryparams):
+    async def all(self, campaign_id, get_all=False, **queryparams):
         """
         Get a list of member’s subscriber activity in a specific campaign.
 
@@ -42,12 +42,12 @@ class ReportEmailActivity(BaseApi):
         self.campaign_id = campaign_id
         self.subscriber_hash = None
         if get_all:
-            return self._iterate(url=self._build_path(campaign_id, 'email-activity'), **queryparams)
+            return await self._iterate(url=self._build_path(campaign_id, 'email-activity'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(campaign_id, 'email-activity'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(campaign_id, 'email-activity'), **queryparams)
 
 
-    def get(self, campaign_id, subscriber_hash, **queryparams):
+    async def get(self, campaign_id, subscriber_hash, **queryparams):
         """
         Get a specific list member’s activity in a campaign including opens,
         clicks, and bounces.
@@ -64,7 +64,7 @@ class ReportEmailActivity(BaseApi):
         subscriber_hash = check_subscriber_hash(subscriber_hash)
         self.campaign_id = campaign_id
         self.subscriber_hash = subscriber_hash
-        return self._mc_client._get(
+        return await self._mc_client._get(
             url=self._build_path(campaign_id, 'email-activity', subscriber_hash),
             **queryparams
         )

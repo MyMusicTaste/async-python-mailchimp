@@ -28,7 +28,7 @@ class CampaignActions(BaseApi):
 
 
     # Pro feature
-    def cancel(self, campaign_id):
+    async def cancel(self, campaign_id):
         """
         Cancel a Regular or Plain-Text Campaign after you send, before all of
         your recipients receive it. This feature is included with MailChimp
@@ -38,10 +38,10 @@ class CampaignActions(BaseApi):
         :type campaign_id: :py:class:`str`
         """
         self.campaign_id = campaign_id
-        return self._mc_client._post(url=self._build_path(campaign_id, 'actions/cancel-send'))
+        return await self._mc_client._post(url=self._build_path(campaign_id, 'actions/cancel-send'))
 
 
-    def pause(self, campaign_id):
+    async def pause(self, campaign_id):
         """
         Pause an RSS-Driven campaign.
 
@@ -49,10 +49,10 @@ class CampaignActions(BaseApi):
         :type campaign_id: :py:class:`str`
         """
         self.campaign_id = campaign_id
-        return self._mc_client._post(url=self._build_path(campaign_id, 'actions/pause'))
+        return await self._mc_client._post(url=self._build_path(campaign_id, 'actions/pause'))
 
 
-    def replicate(self, campaign_id):
+    async def replicate(self, campaign_id):
         """
         Replicate a campaign in saved or send status.
 
@@ -60,10 +60,10 @@ class CampaignActions(BaseApi):
         :type campaign_id: :py:class:`str`
         """
         self.campaign_id = campaign_id
-        return self._mc_client._post(url=self._build_path(campaign_id, 'actions/replicate'))
+        return await self._mc_client._post(url=self._build_path(campaign_id, 'actions/replicate'))
 
 
-    def resume(self, campaign_id):
+    async def resume(self, campaign_id):
         """
         Resume an RSS-Driven campaign.
 
@@ -71,10 +71,10 @@ class CampaignActions(BaseApi):
         :type campaign_id: :py:class:`str`
         """
         self.campaign_id = campaign_id
-        return self._mc_client._post(url=self._build_path(campaign_id, 'actions/resume'))
+        return await self._mc_client._post(url=self._build_path(campaign_id, 'actions/resume'))
 
 
-    def schedule(self, campaign_id, data):
+    async def schedule(self, campaign_id, data):
         """
         Schedule a campaign for delivery. If you’re using Multivariate
         Campaigns to test send times or sending RSS Campaigns, use the send
@@ -100,10 +100,10 @@ class CampaignActions(BaseApi):
             raise ValueError('The schedule_time must end on the quarter hour (00, 15, 30, 45)')
         data['schedule_time'] = data['schedule_time'].strftime('%Y-%m-%dT%H:%M:00+00:00')
         self.campaign_id = campaign_id
-        return self._mc_client._post(url=self._build_path(campaign_id, 'actions/schedule'), data=data)
+        return await self._mc_client._post(url=self._build_path(campaign_id, 'actions/schedule'), data=data)
 
 
-    def send(self, campaign_id):
+    async def send(self, campaign_id):
         """
         Send a MailChimp campaign. For RSS Campaigns, the campaign will send
         according to its schedule. All other campaigns will send immediately.
@@ -112,10 +112,10 @@ class CampaignActions(BaseApi):
         :type campaign_id: :py:class:`str`
         """
         self.campaign_id = campaign_id
-        return self._mc_client._post(url=self._build_path(campaign_id, 'actions/send'))
+        return await self._mc_client._post(url=self._build_path(campaign_id, 'actions/send'))
 
 
-    def test(self, campaign_id, data):
+    async def test(self, campaign_id, data):
         """
         Send a test email.
 
@@ -133,10 +133,10 @@ class CampaignActions(BaseApi):
         if data['send_type'] not in ['html', 'plain_text']:
             raise ValueError('The send_type must be either "html" or "plain_text"')
         self.campaign_id = campaign_id
-        return self._mc_client._post(url=self._build_path(campaign_id, 'actions/test'), data=data)
+        return await self._mc_client._post(url=self._build_path(campaign_id, 'actions/test'), data=data)
 
 
-    def unschedule(self, campaign_id):
+    async def unschedule(self, campaign_id):
         """
         Unschedule a scheduled campaign that hasn’t started sending.
 
@@ -144,4 +144,4 @@ class CampaignActions(BaseApi):
         :type campaign_id: :py:class:`str`
         """
         self.campaign_id = campaign_id
-        return self._mc_client._post(url=self._build_path(campaign_id, 'actions/unschedule'))
+        return await self._mc_client._post(url=self._build_path(campaign_id, 'actions/unschedule'))

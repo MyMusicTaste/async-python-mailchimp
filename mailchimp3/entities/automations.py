@@ -34,7 +34,7 @@ class Automations(BaseApi):
 
 
     # Paid feature
-    def all(self, get_all=False, **queryparams):
+    async def all(self, get_all=False, **queryparams):
         """
         Get a summary of an account’s Automations.
 
@@ -46,13 +46,13 @@ class Automations(BaseApi):
         """
         self.workflow_id = None
         if get_all:
-            return self._iterate(url=self._build_path(), **queryparams)
+            return await self._iterate(url=self._build_path(), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(), **queryparams)
+            return await self._mc_client._get(url=self._build_path(), **queryparams)
 
 
     # Paid feature
-    def get(self, workflow_id, **queryparams):
+    async def get(self, workflow_id, **queryparams):
         """
         Get a summary of an individual Automation workflow’s settings and
         content. The trigger_settings object returns information for the first
@@ -65,4 +65,4 @@ class Automations(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.workflow_id = workflow_id
-        return self._mc_client._get(url=self._build_path(workflow_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(workflow_id), **queryparams)

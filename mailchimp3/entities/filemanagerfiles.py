@@ -25,7 +25,7 @@ class FileManagerFiles(BaseApi):
         self.file_id = None
 
 
-    def create(self, data):
+    async def create(self, data):
         """
         Upload a new image or file to the File Manager.
 
@@ -40,7 +40,7 @@ class FileManagerFiles(BaseApi):
             raise KeyError('The file must have a name')
         if 'file_data' not in data:
             raise KeyError('The file must have file_data')
-        response = self._mc_client._post(url=self._build_path(), data=data)
+        response = await self._mc_client._post(url=self._build_path(), data=data)
         if response is not None:
             self.file_id = response['id']
         else:
@@ -48,7 +48,7 @@ class FileManagerFiles(BaseApi):
         return response
 
 
-    def all(self, get_all=False, **queryparams):
+    async def all(self, get_all=False, **queryparams):
         """
         Get a list of available images and files stored in the File Manager for the account.
 
@@ -68,12 +68,12 @@ class FileManagerFiles(BaseApi):
         """
         self.file_id = None
         if get_all:
-            return self._iterate(url=self._build_path(), **queryparams)
+            return await self._iterate(url=self._build_path(), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(), **queryparams)
+            return await self._mc_client._get(url=self._build_path(), **queryparams)
 
 
-    def get(self, file_id, **queryparams):
+    async def get(self, file_id, **queryparams):
         """
         Get information about a specific file in the File Manager.
 
@@ -84,10 +84,10 @@ class FileManagerFiles(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.file_id = file_id
-        return self._mc_client._get(url=self._build_path(file_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(file_id), **queryparams)
 
 
-    def update(self, file_id, data):
+    async def update(self, file_id, data):
         """
         Update a file in the File Manager.
 
@@ -105,10 +105,10 @@ class FileManagerFiles(BaseApi):
             raise KeyError('The file must have a name')
         if 'file_data' not in data:
             raise KeyError('The file must have file_data')
-        return self._mc_client._patch(url=self._build_path(file_id), data=data)
+        return await self._mc_client._patch(url=self._build_path(file_id), data=data)
 
 
-    def delete(self, file_id):
+    async def delete(self, file_id):
         """
         Remove a specific file from the File Manager.
 
@@ -116,4 +116,4 @@ class FileManagerFiles(BaseApi):
         :type file_id: :py:class:`str`
         """
         self.file_id = file_id
-        return self._mc_client._delete(url=self._build_path(file_id))
+        return await self._mc_client._delete(url=self._build_path(file_id))

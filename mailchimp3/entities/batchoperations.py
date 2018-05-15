@@ -24,7 +24,7 @@ class BatchOperations(BaseApi):
         self.operation_status = None
 
 
-    def create(self, data):
+    async def create(self, data):
         """
         Begin processing a batch operations request.
 
@@ -50,10 +50,10 @@ class BatchOperations(BaseApi):
                                  'or "DELETE", not {0}'.format(op['method']))
             if 'path' not in op:
                 raise KeyError('The batch operation must have a path')
-        return self._mc_client._post(url=self._build_path(), data=data)
+        return await self._mc_client._post(url=self._build_path(), data=data)
 
 
-    def all(self, get_all=False, **queryparams):
+    async def all(self, get_all=False, **queryparams):
         """
         Get a summary of batch requests that have been made.
 
@@ -68,12 +68,12 @@ class BatchOperations(BaseApi):
         self.batch_id = None
         self.operation_status = None
         if get_all:
-            return self._iterate(url=self._build_path(), **queryparams)
+            return await self._iterate(url=self._build_path(), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(), **queryparams)
+            return await self._mc_client._get(url=self._build_path(), **queryparams)
 
 
-    def get(self, batch_id, **queryparams):
+    async def get(self, batch_id, **queryparams):
         """
         Get the status of a batch request.
 
@@ -85,10 +85,10 @@ class BatchOperations(BaseApi):
         """
         self.batch_id = batch_id
         self.operation_status = None
-        return self._mc_client._get(url=self._build_path(batch_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(batch_id), **queryparams)
 
 
-    def delete(self, batch_id):
+    async def delete(self, batch_id):
         """
         Stops a batch request from running. Since only one batch request is
         run at a time, this can be used to cancel a long running request. The
@@ -100,4 +100,4 @@ class BatchOperations(BaseApi):
         """
         self.batch_id = batch_id
         self.operation_status = None
-        return self._mc_client._delete(url=self._build_path(batch_id))
+        return await self._mc_client._delete(url=self._build_path(batch_id))

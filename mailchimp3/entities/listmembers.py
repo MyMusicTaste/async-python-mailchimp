@@ -32,7 +32,7 @@ class ListMembers(BaseApi):
         self.notes = ListMemberNotes(self)
 
 
-    def create(self, list_id, data):
+    async def create(self, list_id, data):
         """
         Add a new member to the list.
 
@@ -55,7 +55,7 @@ class ListMembers(BaseApi):
         if 'email_address' not in data:
             raise KeyError('The list member must have an email_address')
         check_email(data['email_address'])
-        response = self._mc_client._post(url=self._build_path(list_id, 'members'), data=data)
+        response = await self._mc_client._post(url=self._build_path(list_id, 'members'), data=data)
         if response is not None:
             self.subscriber_hash = response['id']
         else:
@@ -63,7 +63,7 @@ class ListMembers(BaseApi):
         return response
 
 
-    def all(self, list_id, get_all=False, **queryparams):
+    async def all(self, list_id, get_all=False, **queryparams):
         """
         Get information about members in a specific MailChimp list.
 
@@ -91,12 +91,12 @@ class ListMembers(BaseApi):
         self.list_id = list_id
         self.subscriber_hash = None
         if get_all:
-            return self._iterate(url=self._build_path(list_id, 'members'), **queryparams)
+            return await self._iterate(url=self._build_path(list_id, 'members'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(list_id, 'members'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(list_id, 'members'), **queryparams)
 
 
-    def get(self, list_id, subscriber_hash, **queryparams):
+    async def get(self, list_id, subscriber_hash, **queryparams):
         """
         Get information about a specific list member, including a currently
         subscribed, unsubscribed, or bounced member.
@@ -113,10 +113,10 @@ class ListMembers(BaseApi):
         subscriber_hash = check_subscriber_hash(subscriber_hash)
         self.list_id = list_id
         self.subscriber_hash = subscriber_hash
-        return self._mc_client._get(url=self._build_path(list_id, 'members', subscriber_hash), **queryparams)
+        return await self._mc_client._get(url=self._build_path(list_id, 'members', subscriber_hash), **queryparams)
 
 
-    def update(self, list_id, subscriber_hash, data):
+    async def update(self, list_id, subscriber_hash, data):
         """
         Update information for a specific list member.
 
@@ -131,10 +131,10 @@ class ListMembers(BaseApi):
         subscriber_hash = check_subscriber_hash(subscriber_hash)
         self.list_id = list_id
         self.subscriber_hash = subscriber_hash
-        return self._mc_client._patch(url=self._build_path(list_id, 'members', subscriber_hash), data=data)
+        return await self._mc_client._patch(url=self._build_path(list_id, 'members', subscriber_hash), data=data)
 
 
-    def create_or_update(self, list_id, subscriber_hash, data):
+    async def create_or_update(self, list_id, subscriber_hash, data):
         """
         Add or update a list member.
 
@@ -162,10 +162,10 @@ class ListMembers(BaseApi):
         if data['status_if_new'] not in ['subscribed', 'unsubscribed', 'cleaned', 'pending', 'transactional']:
             raise ValueError('The list member status_if_new must be one of "subscribed", "unsubscribed", "cleaned", '
                              '"pending", or "transactional"')
-        return self._mc_client._put(url=self._build_path(list_id, 'members', subscriber_hash), data=data)
+        return await self._mc_client._put(url=self._build_path(list_id, 'members', subscriber_hash), data=data)
 
 
-    def delete(self, list_id, subscriber_hash):
+    async def delete(self, list_id, subscriber_hash):
         """
         Delete a member from a list.
 
@@ -178,4 +178,4 @@ class ListMembers(BaseApi):
         subscriber_hash = check_subscriber_hash(subscriber_hash)
         self.list_id = list_id
         self.subscriber_hash = subscriber_hash
-        return self._mc_client._delete(url=self._build_path(list_id, 'members', subscriber_hash))
+        return await self._mc_client._delete(url=self._build_path(list_id, 'members', subscriber_hash))

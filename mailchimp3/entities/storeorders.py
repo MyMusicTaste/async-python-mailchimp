@@ -47,7 +47,7 @@ class StoreOrders(BaseApi):
         self.lines = StoreOrderLines(self)
 
 
-    def create(self, store_id, data):
+    async def create(self, store_id, data):
         """
         Add a new order to a store.
 
@@ -101,7 +101,7 @@ class StoreOrders(BaseApi):
                 raise KeyError('Each order line must have a quantity')
             if 'price' not in line:
                 raise KeyError('Each order line must have a price')
-        response = self._mc_client._post(url=self._build_path(store_id, 'orders'), data=data)
+        response = await self._mc_client._post(url=self._build_path(store_id, 'orders'), data=data)
         if response is not None:
             self.order_id = response['id']
         else:
@@ -109,7 +109,7 @@ class StoreOrders(BaseApi):
         return response
 
 
-    def all(self, store_id, get_all=False, **queryparams):
+    async def all(self, store_id, get_all=False, **queryparams):
         """
         Get information about a store’s orders.
 
@@ -127,12 +127,12 @@ class StoreOrders(BaseApi):
         self.store_id = store_id
         self.order_id = None
         if get_all:
-            return self._iterate(url=self._build_path(store_id, 'orders'), **queryparams)
+            return await self._iterate(url=self._build_path(store_id, 'orders'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(store_id, 'orders'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(store_id, 'orders'), **queryparams)
 
 
-    def get(self, store_id, order_id, **queryparams):
+    async def get(self, store_id, order_id, **queryparams):
         """
         Get information about a specific order.
 
@@ -146,10 +146,10 @@ class StoreOrders(BaseApi):
         """
         self.store_id = store_id
         self.order_id = order_id
-        return self._mc_client._get(url=self._build_path(store_id, 'orders', order_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(store_id, 'orders', order_id), **queryparams)
 
 
-    def update(self, store_id, order_id, data):
+    async def update(self, store_id, order_id, data):
         """
         Update a specific order.
 
@@ -162,10 +162,10 @@ class StoreOrders(BaseApi):
         """
         self.store_id = store_id
         self.order_id = order_id
-        return self._mc_client._patch(url=self._build_path(store_id, 'orders', order_id), data=data)
+        return await self._mc_client._patch(url=self._build_path(store_id, 'orders', order_id), data=data)
 
 
-    def delete(self, store_id, order_id):
+    async def delete(self, store_id, order_id):
         """
         Delete an order.
 
@@ -176,4 +176,4 @@ class StoreOrders(BaseApi):
         """
         self.store_id = store_id
         self.order_id = order_id
-        return self._mc_client._delete(url=self._build_path(store_id, 'orders', order_id))
+        return await self._mc_client._delete(url=self._build_path(store_id, 'orders', order_id))

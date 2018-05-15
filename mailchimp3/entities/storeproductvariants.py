@@ -27,7 +27,7 @@ class StoreProductVariants(BaseApi):
         self.variant_id = None
 
 
-    def create(self, store_id, product_id, data):
+    async def create(self, store_id, product_id, data):
         """
         Add a new variant to the product.
 
@@ -48,7 +48,7 @@ class StoreProductVariants(BaseApi):
             raise KeyError('The product variant must have an id')
         if 'title' not in data:
             raise KeyError('The product variant must have a title')
-        response = self._mc_client._post(url=self._build_path(store_id, 'products', product_id, 'variants'), data=data)
+        response = await self._mc_client._post(url=self._build_path(store_id, 'products', product_id, 'variants'), data=data)
         if response is not None:
             self.variant_id = response['id']
         else:
@@ -56,7 +56,7 @@ class StoreProductVariants(BaseApi):
         return response
 
 
-    def all(self, store_id, product_id, get_all=False, **queryparams):
+    async def all(self, store_id, product_id, get_all=False, **queryparams):
         """
         Get information about a product’s variants.
 
@@ -76,15 +76,15 @@ class StoreProductVariants(BaseApi):
         self.product_id = product_id
         self.variant_id = None
         if get_all:
-            return self._iterate(url=self._build_path(store_id, 'products', product_id, 'variants'), **queryparams)
+            return await self._iterate(url=self._build_path(store_id, 'products', product_id, 'variants'), **queryparams)
         else:
-            return self._mc_client._get(
+            return await self._mc_client._get(
                 url=self._build_path(store_id, 'products', product_id, 'variants'),
                 **queryparams
             )
 
 
-    def get(self, store_id, product_id, variant_id, **queryparams):
+    async def get(self, store_id, product_id, variant_id, **queryparams):
         """
         Get information about a specific product variant.
 
@@ -101,13 +101,13 @@ class StoreProductVariants(BaseApi):
         self.store_id = store_id
         self.product_id = product_id
         self.variant_id = variant_id
-        return self._mc_client._get(
+        return await self._mc_client._get(
             url=self._build_path(store_id, 'products', product_id, 'variants', variant_id),
             **queryparams
         )
 
 
-    def update(self, store_id, product_id, variant_id, data):
+    async def update(self, store_id, product_id, variant_id, data):
         """
         Update a product variant.
 
@@ -123,13 +123,13 @@ class StoreProductVariants(BaseApi):
         self.store_id = store_id
         self.product_id = product_id
         self.variant_id = variant_id
-        return self._mc_client._patch(
+        return await self._mc_client._patch(
             url=self._build_path(store_id, 'products', product_id, 'variants', variant_id),
             data=data
         )
 
 
-    def create_or_update(self, store_id, product_id, variant_id, data):
+    async def create_or_update(self, store_id, product_id, variant_id, data):
         """
         Add or update a product variant.
 
@@ -153,13 +153,13 @@ class StoreProductVariants(BaseApi):
              raise KeyError('The product variant must have an id')
         if 'title' not in data:
             raise KeyError('The product variant must have a title')
-        return self._mc_client._put(
+        return await self._mc_client._put(
             url=self._build_path(store_id, 'products', product_id, 'variants', variant_id),
             data=data
         )
 
 
-    def delete(self, store_id, product_id, variant_id):
+    async def delete(self, store_id, product_id, variant_id):
         """
         Delete a product variant.
 
@@ -173,4 +173,4 @@ class StoreProductVariants(BaseApi):
         self.store_id = store_id
         self.product_id = product_id
         self.variant_id = variant_id
-        return self._mc_client._delete(url=self._build_path(store_id, 'products', product_id, 'variants', variant_id))
+        return await self._mc_client._delete(url=self._build_path(store_id, 'products', product_id, 'variants', variant_id))

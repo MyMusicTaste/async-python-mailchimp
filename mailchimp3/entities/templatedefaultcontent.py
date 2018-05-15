@@ -23,7 +23,7 @@ class TemplateDefaultContent(BaseApi):
         self.template_id = None
 
 
-    def all(self, template_id, **queryparams):
+    async def all(self, template_id, **queryparams):
         """
         Get the sections that you can edit in a template, including each
         section’s default content.
@@ -35,4 +35,4 @@ class TemplateDefaultContent(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.template_id = template_id
-        return self._mc_client._get(url=self._build_path(template_id, 'default-content'), **queryparams)
+        return await self._mc_client._get(url=self._build_path(template_id, 'default-content'), **queryparams)

@@ -26,7 +26,7 @@ class SearchMembers(BaseApi):
         self.list_id = None
 
 
-    def get(self, **queryparams):
+    async def get(self, **queryparams):
         """
         Search for list members. This search can be restricted to a specific
         list, or can be used to search across all lists in an account.
@@ -42,4 +42,4 @@ class SearchMembers(BaseApi):
             self.list_id = queryparams['list_id']
         else:
             self.list_id = None
-        return self._mc_client._get(url=self._build_path(), **queryparams)
+        return await self._mc_client._get(url=self._build_path(), **queryparams)

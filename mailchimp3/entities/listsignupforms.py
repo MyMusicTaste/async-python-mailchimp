@@ -23,7 +23,7 @@ class ListSignupForms(BaseApi):
         self.list_id = None
 
 
-    def create(self, list_id, data):
+    async def create(self, list_id, data):
         """
         Create a customized list signup form.
 
@@ -37,11 +37,11 @@ class ListSignupForms(BaseApi):
         :type data: :py:class:`dict`
         """
         self.list_id = list_id
-        response = self._mc_client._post(url=self._build_path(list_id, 'signup-forms'), data=data)
+        response = await self._mc_client._post(url=self._build_path(list_id, 'signup-forms'), data=data)
         return response
 
 
-    def all(self, list_id):
+    async def all(self, list_id):
         """
         Get signup forms for a specific list.
 
@@ -49,4 +49,4 @@ class ListSignupForms(BaseApi):
         :type list_id: :py:class:`str`
         """
         self.list_id = list_id
-        return self._mc_client._get(url=self._build_path(list_id, 'signup-forms'))
+        return await self._mc_client._get(url=self._build_path(list_id, 'signup-forms'))

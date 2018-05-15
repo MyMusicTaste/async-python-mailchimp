@@ -24,7 +24,7 @@ class ListClients(BaseApi):
         self.list_id = None
 
 
-    def all(self, list_id, **queryparams):
+    async def all(self, list_id, **queryparams):
         """
         Get a list of the top email clients based on user-agent strings.
 
@@ -35,4 +35,4 @@ class ListClients(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.list_id = list_id
-        return self._mc_client._get(url=self._build_path(list_id, 'clients'), **queryparams)
+        return await self._mc_client._get(url=self._build_path(list_id, 'clients'), **queryparams)

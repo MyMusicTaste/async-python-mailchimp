@@ -23,7 +23,7 @@ class SearchCampaigns(BaseApi):
         self.endpoint = 'search-campaigns'
 
 
-    def get(self, **queryparams):
+    async def get(self, **queryparams):
         """
         Search all campaigns for the specified query terms.
 
@@ -35,4 +35,4 @@ class SearchCampaigns(BaseApi):
         queryparams['snip_end'] = string
         queryparams['offset'] = integer
         """
-        return self._mc_client._get(url=self._build_path(), **queryparams)
+        return await self._mc_client._get(url=self._build_path(), **queryparams)

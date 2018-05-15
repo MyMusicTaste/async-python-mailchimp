@@ -28,7 +28,7 @@ class StoreCustomers(BaseApi):
         self.customer_id = None
 
 
-    def create(self, store_id, data):
+    async def create(self, store_id, data):
         """
         Add a new customer to a store.
 
@@ -52,7 +52,7 @@ class StoreCustomers(BaseApi):
             raise KeyError('The store customer must have an opt_in_status')
         if data['opt_in_status'] not in [True, False]:
             raise TypeError('The opt_in_status must be True or False')
-        response = self._mc_client._post(url=self._build_path(store_id, 'customers'), data=data)
+        response = await self._mc_client._post(url=self._build_path(store_id, 'customers'), data=data)
         if response is not None:
             self.customer_id = response['id']
         else:
@@ -60,7 +60,7 @@ class StoreCustomers(BaseApi):
         return response
 
 
-    def all(self, store_id, get_all=False, **queryparams):
+    async def all(self, store_id, get_all=False, **queryparams):
         """
         Get information about a store’s customers.
 
@@ -78,12 +78,12 @@ class StoreCustomers(BaseApi):
         self.store_id = store_id
         self.customer_id = None
         if get_all:
-            return self._iterate(url=self._build_path(store_id, 'customers'), **queryparams)
+            return await self._iterate(url=self._build_path(store_id, 'customers'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(store_id, 'customers'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(store_id, 'customers'), **queryparams)
 
 
-    def get(self, store_id, customer_id, **queryparams):
+    async def get(self, store_id, customer_id, **queryparams):
         """
         Get information about a specific customer.
 
@@ -97,10 +97,10 @@ class StoreCustomers(BaseApi):
         """
         self.store_id = store_id
         self.customer_id = customer_id
-        return self._mc_client._get(url=self._build_path(store_id, 'customers', customer_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(store_id, 'customers', customer_id), **queryparams)
 
 
-    def update(self, store_id, customer_id, data):
+    async def update(self, store_id, customer_id, data):
         """
         Update a customer.
 
@@ -113,10 +113,10 @@ class StoreCustomers(BaseApi):
         """
         self.store_id = store_id
         self.customer_id = customer_id
-        return self._mc_client._patch(url=self._build_path(store_id, 'customers', customer_id), data=data)
+        return await self._mc_client._patch(url=self._build_path(store_id, 'customers', customer_id), data=data)
 
 
-    def create_or_update(self, store_id, customer_id, data):
+    async def create_or_update(self, store_id, customer_id, data):
         """
         Add or update a customer.
 
@@ -143,10 +143,10 @@ class StoreCustomers(BaseApi):
             raise KeyError('The store customer must have an opt_in_status')
         if data['opt_in_status'] not in [True, False]:
             raise TypeError('The opt_in_status must be True or False')
-        return self._mc_client._put(url=self._build_path(store_id, 'customers', customer_id), data=data)
+        return await self._mc_client._put(url=self._build_path(store_id, 'customers', customer_id), data=data)
 
 
-    def delete(self, store_id, customer_id):
+    async def delete(self, store_id, customer_id):
         """
         Delete a customer from a store.
 
@@ -157,4 +157,4 @@ class StoreCustomers(BaseApi):
         """
         self.store_id = store_id
         self.customer_id = customer_id
-        return self._mc_client._delete(url=self._build_path(store_id, 'customers', customer_id))
+        return await self._mc_client._delete(url=self._build_path(store_id, 'customers', customer_id))

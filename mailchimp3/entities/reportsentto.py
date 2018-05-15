@@ -25,7 +25,7 @@ class ReportSentTo(BaseApi):
         self.subscriber_hash = None
 
 
-    def all(self, campaign_id, get_all=False, **queryparams):
+    async def all(self, campaign_id, get_all=False, **queryparams):
         """
         Get information about campaign recipients.
 
@@ -42,12 +42,12 @@ class ReportSentTo(BaseApi):
         self.campaign_id = campaign_id
         self.subscriber_hash = None
         if get_all:
-            return self._iterate(url=self._build_path(campaign_id, 'sent-to'), **queryparams)
+            return await self._iterate(url=self._build_path(campaign_id, 'sent-to'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(campaign_id, 'sent-to'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(campaign_id, 'sent-to'), **queryparams)
 
 
-    def get(self, campaign_id, subscriber_hash, **queryparams):
+    async def get(self, campaign_id, subscriber_hash, **queryparams):
         """
         Get information about a specific campaign recipient.
 
@@ -63,4 +63,4 @@ class ReportSentTo(BaseApi):
         subscriber_hash = check_subscriber_hash(subscriber_hash)
         self.campaign_id = campaign_id
         self.subscriber_hash = subscriber_hash
-        return self._mc_client._get(url=self._build_path(campaign_id, 'sent-to', subscriber_hash), **queryparams)
+        return await self._mc_client._get(url=self._build_path(campaign_id, 'sent-to', subscriber_hash), **queryparams)

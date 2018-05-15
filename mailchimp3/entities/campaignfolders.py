@@ -14,6 +14,7 @@ class CampaignFolders(BaseApi):
     """
     Organize your campaigns using folders.
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize the endpoint
@@ -22,8 +23,7 @@ class CampaignFolders(BaseApi):
         self.endpoint = 'campaign-folders'
         self.folder_id = None
 
-
-    def create(self, data):
+    async def create(self, data):
         """
         Create a new campaign folder.
 
@@ -35,15 +35,14 @@ class CampaignFolders(BaseApi):
         """
         if 'name' not in data:
             raise KeyError('The campaign folder must have a name')
-        response = self._mc_client._post(url=self._build_path(), data=data)
+        response = await self._mc_client._post(url=self._build_path(), data=data)
         if response is not None:
             self.folder_id = response['id']
         else:
             self.folder_id = None
         return response
 
-
-    def all(self, get_all=False, **queryparams):
+    async def all(self, get_all=False, **queryparams):
         """
         Get all folders used to organize campaigns.
 
@@ -57,12 +56,11 @@ class CampaignFolders(BaseApi):
         """
         self.folder_id = None
         if get_all:
-            return self._iterate(url=self._build_path(), **queryparams)
+            return await self._iterate(url=self._build_path(), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(), **queryparams)
+            return await self._mc_client._get(url=self._build_path(), **queryparams)
 
-
-    def get(self, folder_id, **queryparams):
+    async def get(self, folder_id, **queryparams):
         """
         Get information about a specific folder used to organize campaigns.
 
@@ -73,10 +71,9 @@ class CampaignFolders(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.folder_id = folder_id
-        return self._mc_client._get(url=self._build_path(folder_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(folder_id), **queryparams)
 
-
-    def update(self, folder_id, data):
+    async def update(self, folder_id, data):
         """
         Update a specific folder used to organize campaigns.
 
@@ -91,10 +88,9 @@ class CampaignFolders(BaseApi):
         self.folder_id = folder_id
         if 'name' not in data:
             raise KeyError('The campaign folder must have a name')
-        return self._mc_client._patch(url=self._build_path(folder_id), data=data)
+        return await self._mc_client._patch(url=self._build_path(folder_id), data=data)
 
-
-    def delete(self, folder_id):
+    async def delete(self, folder_id):
         """
         Delete a specific campaign folder, and mark all the campaigns in the
         folder as ‘unfiled’.
@@ -103,4 +99,4 @@ class CampaignFolders(BaseApi):
         :type folder_id: :py:class:`str`
         """
         self.folder_id = folder_id
-        return self._mc_client._delete(url=self._build_path(folder_id))
+        return await self._mc_client._delete(url=self._build_path(folder_id))

@@ -24,7 +24,7 @@ class CampaignContent(BaseApi):
         self.campaign_id = None
 
 
-    def get(self, campaign_id, **queryparams):
+    async def get(self, campaign_id, **queryparams):
         """
         Get the the HTML and plain-text content for a campaign.
 
@@ -35,10 +35,10 @@ class CampaignContent(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.campaign_id = campaign_id
-        return self._mc_client._get(url=self._build_path(campaign_id, 'content'), **queryparams)
+        return await self._mc_client._get(url=self._build_path(campaign_id, 'content'), **queryparams)
 
 
-    def update(self, campaign_id, data):
+    async def update(self, campaign_id, data):
         """
         Set the content for a campaign.
 
@@ -48,4 +48,4 @@ class CampaignContent(BaseApi):
         :type data: :py:class:`dict`
         """
         self.campaign_id = campaign_id
-        return self._mc_client._put(url=self._build_path(campaign_id, 'content'), data=data)
+        return await self._mc_client._put(url=self._build_path(campaign_id, 'content'), data=data)

@@ -25,7 +25,7 @@ class ListAbuseReports(BaseApi):
         self.report_id = None
 
 
-    def all(self, list_id, get_all=False, **queryparams):
+    async def all(self, list_id, get_all=False, **queryparams):
         """
         Get all abuse reports for a specific list.
 
@@ -42,12 +42,12 @@ class ListAbuseReports(BaseApi):
         self.list_id = list_id
         self.report_id = None
         if get_all:
-            return self._iterate(url=self._build_path(list_id, 'abuse-reports'), **queryparams)
+            return await self._iterate(url=self._build_path(list_id, 'abuse-reports'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(list_id, 'abuse-reports'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(list_id, 'abuse-reports'), **queryparams)
 
 
-    def get(self, list_id, report_id, **queryparams):
+    async def get(self, list_id, report_id, **queryparams):
         """
         Get details about a specific abuse report.
 
@@ -63,4 +63,4 @@ class ListAbuseReports(BaseApi):
         """
         self.list_id = list_id
         self.report_id = report_id
-        return self._mc_client._get(url=self._build_path(list_id, 'abuse-reports', report_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(list_id, 'abuse-reports', report_id), **queryparams)

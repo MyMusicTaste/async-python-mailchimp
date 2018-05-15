@@ -34,7 +34,7 @@ class Stores(BaseApi):
         self.orders = StoreOrders(self)
         self.products = StoreProducts(self)
 
-    def create(self, data):
+    async def create(self, data):
         """
         Add a new store to your MailChimp account.
 
@@ -62,7 +62,7 @@ class Stores(BaseApi):
             raise KeyError('The store must have a currency_code')
         if not re.match(r"^[A-Z]{3}$", data['currency_code']):
             raise ValueError('The currency_code must be a valid 3-letter ISO 4217 currency code')
-        response = self._mc_client._post(url=self._build_path(), data=data)
+        response = await self._mc_client._post(url=self._build_path(), data=data)
         if response is not None:
             self.store_id = response['id']
         else:
@@ -70,7 +70,7 @@ class Stores(BaseApi):
         return response
 
 
-    def all(self, get_all=False, **queryparams):
+    async def all(self, get_all=False, **queryparams):
         """
         Get information about all stores in the account.
 
@@ -84,12 +84,12 @@ class Stores(BaseApi):
         """
         self.store_id = None
         if get_all:
-            return self._iterate(url=self._build_path(), **queryparams)
+            return await self._iterate(url=self._build_path(), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(), **queryparams)
+            return await self._mc_client._get(url=self._build_path(), **queryparams)
 
 
-    def get(self, store_id, **queryparams):
+    async def get(self, store_id, **queryparams):
         """
         Get information about a specific store.
 
@@ -100,10 +100,10 @@ class Stores(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.store_id = store_id
-        return self._mc_client._get(url=self._build_path(store_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(store_id), **queryparams)
 
 
-    def update(self, store_id, data):
+    async def update(self, store_id, data):
         """
         Update a store.
 
@@ -113,10 +113,10 @@ class Stores(BaseApi):
         :type data: :py:class:`dict`
         """
         self.store_id = store_id
-        return self._mc_client._patch(url=self._build_path(store_id), data=data)
+        return await self._mc_client._patch(url=self._build_path(store_id), data=data)
 
 
-    def delete(self, store_id):
+    async def delete(self, store_id):
         """
         Delete a store. Deleting a store will also delete any associated
         subresources, including Customers, Orders, Products, and Carts.
@@ -125,4 +125,4 @@ class Stores(BaseApi):
         :type store_id: :py:class:`str`
         """
         self.store_id = store_id
-        return self._mc_client._delete(url=self._build_path(store_id))
+        return await self._mc_client._delete(url=self._build_path(store_id))

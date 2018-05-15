@@ -23,7 +23,7 @@ class ReportCampaignAbuseReports(BaseApi):
         self.report_id = None
 
 
-    def all(self, campaign_id, **queryparams):
+    async def all(self, campaign_id, **queryparams):
         """
         Get a list of abuse complaints for a specific campaign.
 
@@ -35,10 +35,10 @@ class ReportCampaignAbuseReports(BaseApi):
         """
         self.campaign_id = campaign_id
         self.report_id = None
-        return self._mc_client._get(url=self._build_path(campaign_id, 'abuse-reports'), **queryparams)
+        return await self._mc_client._get(url=self._build_path(campaign_id, 'abuse-reports'), **queryparams)
 
 
-    def get(self, campaign_id, report_id, **queryparams):
+    async def get(self, campaign_id, report_id, **queryparams):
         """
         Get information about a specific abuse report for a campaign.
 
@@ -52,4 +52,4 @@ class ReportCampaignAbuseReports(BaseApi):
         """
         self.campaign_id = campaign_id
         self.report_id = report_id
-        return self._mc_client._get(url=self._build_path(campaign_id, 'abuse-reports', report_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(campaign_id, 'abuse-reports', report_id), **queryparams)

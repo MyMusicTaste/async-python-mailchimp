@@ -25,6 +25,7 @@ class Lists(BaseApi):
     """
     A MailChimp list is a powerful and flexible tool that helps you manage your contacts.
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize the endpoint
@@ -43,8 +44,7 @@ class Lists(BaseApi):
         self.signup_forms = ListSignupForms(self)
         self.webhooks = ListWebhooks(self)
 
-
-    def create(self, data):
+    async def create(self, data):
         """
         Create a new list in your MailChimp account.
 
@@ -105,15 +105,14 @@ class Lists(BaseApi):
             raise KeyError('The list must have an email_type_option')
         if data['email_type_option'] not in [True, False]:
             raise TypeError('The list email_type_option must be True or False')
-        response = self._mc_client._post(url=self._build_path(), data=data)
+        response = await self._mc_client._post(url=self._build_path(), data=data)
         if response is not None:
             self.list_id = response['id']
         else:
             self.list_id = None
         return response
 
-
-    def update_members(self, list_id, data):
+    async def update_members(self, list_id, data):
         """
         Batch subscribe or unsubscribe list members.
 
@@ -160,10 +159,9 @@ class Lists(BaseApi):
                                  '"cleaned", or "pending"')
         if 'update_existing' not in data:
             data['update_existing'] = False
-        return self._mc_client._post(url=self._build_path(list_id), data=data)
+        return await self._mc_client._post(url=self._build_path(list_id), data=data)
 
-
-    def all(self, get_all=False, **queryparams):
+    async def all(self, get_all=False, **queryparams):
         """
         Get information about all lists in the account.
 
@@ -184,12 +182,11 @@ class Lists(BaseApi):
         """
         self.list_id = None
         if get_all:
-            return self._iterate(url=self._build_path(), **queryparams)
+            return await self._iterate(url=self._build_path(), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(), **queryparams)
+            return await self._mc_client._get(url=self._build_path(), **queryparams)
 
-
-    def get(self, list_id, **queryparams):
+    async def get(self, list_id, **queryparams):
         """
         Get information about a specific list in your MailChimp account.
         Results include list members who have signed up but haven’t confirmed
@@ -202,10 +199,9 @@ class Lists(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.list_id = list_id
-        return self._mc_client._get(url=self._build_path(list_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(list_id), **queryparams)
 
-
-    def update(self, list_id, data):
+    async def update(self, list_id, data):
         """
         Update the settings for a specific list.
 
@@ -269,10 +265,9 @@ class Lists(BaseApi):
             raise KeyError('The list must have an email_type_option')
         if data['email_type_option'] not in [True, False]:
             raise TypeError('The list email_type_option must be True or False')
-        return self._mc_client._patch(url=self._build_path(list_id), data=data)
+        return await self._mc_client._patch(url=self._build_path(list_id), data=data)
 
-
-    def delete(self, list_id):
+    async def delete(self, list_id):
         """
         Delete a list from your MailChimp account. If you delete a list,
         you’ll lose the list history—including subscriber activity,
@@ -283,5 +278,4 @@ class Lists(BaseApi):
         :type list_id: :py:class:`str`
         """
         self.list_id = list_id
-        return self._mc_client._delete(url=self._build_path(list_id))
-
+        return await self._mc_client._delete(url=self._build_path(list_id))

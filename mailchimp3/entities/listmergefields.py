@@ -24,7 +24,7 @@ class ListMergeFields(BaseApi):
         self.merge_id = None
 
 
-    def create(self, list_id, data):
+    async def create(self, list_id, data):
         """
         Add a new merge field for a specific list.
 
@@ -42,7 +42,7 @@ class ListMergeFields(BaseApi):
             raise KeyError('The list merge field must have a name')
         if 'type' not in data:
             raise KeyError('The list merge field must have a type')
-        response = self._mc_client._post(url=self._build_path(list_id, 'merge-fields'), data=data)
+        response = await self._mc_client._post(url=self._build_path(list_id, 'merge-fields'), data=data)
         if response is not None:
             self.merge_id = response['merge_id']
         else:
@@ -50,7 +50,7 @@ class ListMergeFields(BaseApi):
         return response
 
 
-    def all(self, list_id, get_all=False, **queryparams):
+    async def all(self, list_id, get_all=False, **queryparams):
         """
         Get a list of all merge fields (formerly merge vars) for a list.
 
@@ -69,12 +69,12 @@ class ListMergeFields(BaseApi):
         self.list_id = list_id
         self.merge_id = None
         if get_all:
-            return self._iterate(url=self._build_path(list_id, 'merge-fields'), **queryparams)
+            return await self._iterate(url=self._build_path(list_id, 'merge-fields'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(list_id, 'merge-fields'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(list_id, 'merge-fields'), **queryparams)
 
 
-    def get(self, list_id, merge_id):
+    async def get(self, list_id, merge_id):
         """
         Get information about a specific merge field in a list.
 
@@ -85,10 +85,10 @@ class ListMergeFields(BaseApi):
         """
         self.list_id = list_id
         self.merge_id = merge_id
-        return self._mc_client._get(url=self._build_path(list_id, 'merge-fields', merge_id))
+        return await self._mc_client._get(url=self._build_path(list_id, 'merge-fields', merge_id))
 
 
-    def update(self, list_id, merge_id, data):
+    async def update(self, list_id, merge_id, data):
         """
         Update a specific merge field in a list.
 
@@ -106,10 +106,10 @@ class ListMergeFields(BaseApi):
         self.merge_id = merge_id
         if 'name' not in data:
             raise KeyError('The list merge field must have a name')
-        return self._mc_client._patch(url=self._build_path(list_id, 'merge-fields', merge_id), data=data)
+        return await self._mc_client._patch(url=self._build_path(list_id, 'merge-fields', merge_id), data=data)
 
 
-    def delete(self, list_id, merge_id):
+    async def delete(self, list_id, merge_id):
         """
         Delete a specific merge field in a list.
 
@@ -120,4 +120,4 @@ class ListMergeFields(BaseApi):
         """
         self.list_id = list_id
         self.merge_id = merge_id
-        return self._mc_client._delete(url=self._build_path(list_id, 'merge-fields', merge_id))
+        return await self._mc_client._delete(url=self._build_path(list_id, 'merge-fields', merge_id))

@@ -15,6 +15,7 @@ class CampaignFeedback(BaseApi):
     Post comments, reply to team feedback, and send test emails while you’re
     working together on a MailChimp campaign.
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize the endpoint
@@ -24,8 +25,7 @@ class CampaignFeedback(BaseApi):
         self.campaign_id = None
         self.feedback_id = None
 
-
-    def create(self, campaign_id, data, **queryparams):
+    async def create(self, campaign_id, data, **queryparams):
         """
         Add feedback on a specific campaign.
 
@@ -43,15 +43,14 @@ class CampaignFeedback(BaseApi):
         self.campaign_id = campaign_id
         if 'message' not in data:
             raise KeyError('The campaign feedback must have a message')
-        response = self._mc_client._post(url=self._build_path(campaign_id, 'feedback'), data=data, **queryparams)
+        response = await self._mc_client._post(url=self._build_path(campaign_id, 'feedback'), data=data, **queryparams)
         if response is not None:
             self.feedback_id = response['feedback_id']
         else:
             self.feedback_id = None
         return response
 
-
-    def all(self, campaign_id, get_all=False, **queryparams):
+    async def all(self, campaign_id, get_all=False, **queryparams):
         """
         Get team feedback while you’re working together on a MailChimp
         campaign.
@@ -67,12 +66,11 @@ class CampaignFeedback(BaseApi):
         self.campaign_id = campaign_id
         self.feedback_id = None
         if get_all:
-            return self._iterate(url=self._build_path(campaign_id, 'feedback'), **queryparams)
+            return await self._iterate(url=self._build_path(campaign_id, 'feedback'), **queryparams)
         else:
-            return self._mc_client._get(url=self._build_path(campaign_id, 'feedback'), **queryparams)
+            return await self._mc_client._get(url=self._build_path(campaign_id, 'feedback'), **queryparams)
 
-
-    def get(self, campaign_id, feedback_id, **queryparams):
+    async def get(self, campaign_id, feedback_id, **queryparams):
         """
         Get a specific feedback message from a campaign.
 
@@ -86,10 +84,9 @@ class CampaignFeedback(BaseApi):
         """
         self.campaign_id = campaign_id
         self.feedback_id = feedback_id
-        return self._mc_client._get(url=self._build_path(campaign_id, 'feedback', feedback_id), **queryparams)
+        return await self._mc_client._get(url=self._build_path(campaign_id, 'feedback', feedback_id), **queryparams)
 
-
-    def update(self, campaign_id, feedback_id, data):
+    async def update(self, campaign_id, feedback_id, data):
         """
         Update a specific feedback message for a campaign.
 
@@ -107,10 +104,9 @@ class CampaignFeedback(BaseApi):
         self.feedback_id = feedback_id
         if 'message' not in data:
             raise KeyError('The campaign feedback must have a message')
-        return self._mc_client._patch(url=self._build_path(campaign_id, 'feedback', feedback_id), data=data)
+        return await self._mc_client._patch(url=self._build_path(campaign_id, 'feedback', feedback_id), data=data)
 
-
-    def delete(self, campaign_id, feedback_id):
+    async def delete(self, campaign_id, feedback_id):
         """
         Remove a specific feedback message for a campaign.
 
@@ -121,4 +117,4 @@ class CampaignFeedback(BaseApi):
         """
         self.campaign_id = campaign_id
         self.feedback_id = feedback_id
-        return self._mc_client._delete(url=self._build_path(campaign_id, 'feedback', feedback_id))
+        return await self._mc_client._delete(url=self._build_path(campaign_id, 'feedback', feedback_id))

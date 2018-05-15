@@ -14,6 +14,7 @@ class ReportDomainPerformance(BaseApi):
     """
     Get statistics for the top-performing domains from a campaign.
     """
+
     def __init__(self, *args, **kwargs):
         """
         Initialize the endpoint
@@ -22,8 +23,7 @@ class ReportDomainPerformance(BaseApi):
         self.endpoint = 'reports'
         self.campaign_id = None
 
-
-    def all(self, campaign_id, **queryparams):
+    async def all(self, campaign_id, **queryparams):
         """
         Get statistics for the top-performing email domains in a campaign.
 
@@ -34,4 +34,4 @@ class ReportDomainPerformance(BaseApi):
         queryparams['exclude_fields'] = []
         """
         self.campaign_id = campaign_id
-        return self._mc_client._get(url=self._build_path(campaign_id, 'domain-performance'), **queryparams)
+        return await self._mc_client._get(url=self._build_path(campaign_id, 'domain-performance'), **queryparams)
