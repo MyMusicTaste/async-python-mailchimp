@@ -113,7 +113,7 @@ class MailChimpClient(object):
                 raise MailChimpError(await r.json())
             if r.status == 204:
                 return None
-            return r.json()
+            return await r.json()
 
     @_enabled_or_noop
     async def _get(self, url, **queryparams):
