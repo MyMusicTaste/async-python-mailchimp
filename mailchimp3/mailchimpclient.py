@@ -8,25 +8,20 @@ from __future__ import unicode_literals
 import functools
 import re
 
-import requests
-from requests.auth import HTTPBasicAuth
-# Handle library reorganisation Python 2 > Python 3.
-try:
-    from urllib.parse import urljoin
-    from urllib.parse import urlencode
-except ImportError:
-    from urlparse import urljoin
-    from urllib import urlencode
+from urllib.parse import urljoin
+from urllib.parse import urlencode
 
 import logging
 
 _logger = logging.getLogger('mailchimp3.client')
+
 
 def _enabled_or_noop(fn):
     @functools.wraps(fn)
     def wrapper(self, *args, **kwargs):
         if self.enabled:
             return fn(self, *args, **kwargs)
+
     return wrapper
 
 
@@ -38,6 +33,7 @@ class MailChimpClient(object):
     """
     MailChimp class to communicate with the v3 API
     """
+
     def __init__(self, mc_api=None, mc_user='python-mailchimp', access_token=None, enabled=True, timeout=None,
                  request_hooks=None, request_headers=None):
         """
@@ -72,8 +68,9 @@ class MailChimpClient(object):
             self.base_url = self.auth.get_base_url() + '/3.0/'
         elif mc_api:
             if not re.match(r"^[0-9a-f]{32}$", mc_api.split('-')[0]):
-                raise ValueError('The API key that you have entered is not valid, did you enter a username by mistake?\n'
-                                 'The order of arguments for API key and username has reversed in 2.1.0')
+                raise ValueError(
+                    'The API key that you have entered is not valid, did you enter a username by mistake?\n'
+                    'The order of arguments for API key and username has reversed in 2.1.0')
             self.auth = HTTPBasicAuth(mc_user, mc_api)
             datacenter = mc_api.split('-').pop()
             self.base_url = 'https://{0}.api.mailchimp.com/3.0/'.format(datacenter)
@@ -82,7 +79,6 @@ class MailChimpClient(object):
         self.request_headers = request_headers or requests.utils.default_headers()
         self.request_hooks = request_hooks or requests.hooks.default_hooks()
 
-
     def _make_request(self, **kwargs):
         _logger.info(u'{method} Request: {url}'.format(**kwargs))
         if kwargs.get('json'):
@@ -90,11 +86,10 @@ class MailChimpClient(object):
 
         response = requests.request(**kwargs)
 
-        _logger.info(u'{method} Response: {status} {text}'\
-            .format(method=kwargs['method'], status=response.status_code, text=response.text))
+        _logger.info(u'{method} Response: {status} {text}' \
+                     .format(method=kwargs['method'], status=response.status_code, text=response.text))
 
         return response
-
 
     @_enabled_or_noop
     def _post(self, url, data=None):
@@ -127,7 +122,6 @@ class MailChimpClient(object):
                 return None
             return r.json()
 
-
     @_enabled_or_noop
     def _get(self, url, **queryparams):
         """
@@ -157,7 +151,6 @@ class MailChimpClient(object):
                 raise MailChimpError(r.json())
             return r.json()
 
-
     @_enabled_or_noop
     def _delete(self, url):
         """
@@ -185,7 +178,6 @@ class MailChimpClient(object):
             if r.status_code == 204:
                 return
             return r.json()
-
 
     @_enabled_or_noop
     def _patch(self, url, data=None):
@@ -215,7 +207,6 @@ class MailChimpClient(object):
             if r.status_code >= 400:
                 raise MailChimpError(r.json())
             return r.json()
-
 
     @_enabled_or_noop
     def _put(self, url, data=None):
@@ -254,6 +245,7 @@ class MailChimpOAuth(requests.auth.AuthBase):
     documentation found at
     http://developer.mailchimp.com/documentation/mailchimp/guides/how-to-use-oauth2/
     """
+
     def __init__(self, access_token):
         """
         Initialize the OAuth and save the access token
@@ -263,14 +255,12 @@ class MailChimpOAuth(requests.auth.AuthBase):
         """
         self._access_token = access_token
 
-
     def __call__(self, r):
         """
         Authorize with the access token provided in __init__
         """
         r.headers['Authorization'] = 'OAuth ' + self._access_token
         return r
-
 
     def get_metadata(self):
         """
@@ -286,7 +276,6 @@ class MailChimpOAuth(requests.auth.AuthBase):
             if 'error' in output:
                 raise requests.exceptions.RequestException(output['error'])
             return output
-
 
     def get_base_url(self):
         """
