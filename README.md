@@ -3,7 +3,7 @@
 # async-python-mailchimp-api
 
 A straighforward python asynchronous client for v3 of MailChimp API using
-aiohttp >= 3.0.0.
+aiohttp >= 3.0.0. This Project forked from [python-mailchimp](https://github.com/charlesthk/python-mailchimp)
 
 ## Getting Started
 
