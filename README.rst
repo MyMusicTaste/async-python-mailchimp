@@ -1,10 +1,10 @@
-|mailchimp3 v3.0.1 on PyPi| |MIT license| |Stable|
+|MIT license|
 
-python-mailchimp-api
+async-python-mailchimp-api
 ====================
 
-A straighforward python client for v3 of MailChimp API using
-requests >= 2.7.0.
+A straighforward python asynchronous client for v3 of MailChimp API using
+aiohttp >= 3.0.0.
 
 Getting Started
 ---------------
@@ -12,10 +12,10 @@ Getting Started
 Installation
 ~~~~~~~~~~~~
 
-This client is hosted at PyPi under the name ``mailchimp3``, to install
+This client is hosted at PyPi under the name ``async-mailchimp3``, to install
 it, simply run
 
-``pip install mailchimp3``
+``pip install async-mailchimp3``
 
 Upgrading from v2.x
 ~~~~~~~~~~~~~~~~~~~~~
@@ -885,7 +885,4 @@ License
 
 The project is licensed under the MIT License.
 
-.. |mailchimp3 v3.0.1 on PyPi| image:: https://img.shields.io/pypi/v/mailchimp3.svg
-   :target: https://pypi.python.org/pypi/mailchimp3
 .. |MIT license| image:: https://img.shields.io/badge/licence-MIT-blue.svg
-.. |Stable| image:: https://img.shields.io/badge/status-stable-green.svg
