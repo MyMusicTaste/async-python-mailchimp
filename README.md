@@ -113,7 +113,7 @@ display email_address and id for each member in list 123456:
 
     # You are encouraged to specify a User-Agent for requests to the MailChimp
     # API. Headers can be specified using the ``request_headers`` parameter.
-    headers = requests.utils.default_headers()
+    headers = {}
     headers['User-Agent'] = 'Example (example@example.com)'
     client = MailChimp('YOUR USERNAME', 'YOUR SECRET KEY',
                        request_headers=headers)
